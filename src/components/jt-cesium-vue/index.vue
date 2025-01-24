@@ -233,7 +233,7 @@ export default defineComponent({
     }
   },
   emits: {
-    [LOADED_EVENT](payload: { viewer: Cesium.Viewer }) {
+    [LOADED_EVENT]: (payload: { viewer: Cesium.Viewer }): boolean => {
       return true
     },
   },
