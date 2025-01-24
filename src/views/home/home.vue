@@ -4,6 +4,7 @@
       <jt-toolBar v-show="toolbarShow" ref="toolbar" />
 
       <div class="relative" :style="jtCesiumVueContainerStyle">
+      <!--overlay 是覆盖在地图地图上的界面交互层，前端html，css都写在这里        -->
         <overlay v-if="cesiumLoaded">
           <router-view></router-view>
 
@@ -63,6 +64,7 @@ import jtDraggableResizable from '@/components/jt-draggable-resizable/index.vue'
 import { LayoutActionTypes } from '@/store/modules/jt-cesium-vue/modules/layout/action-types'
 
 import { LocationBarGetterTypes } from '@/store/modules/jt-cesium-vue/modules/locationbar/getter-types'
+import Jt from '@/libs/cesium/cesium-jt'
 
 export default defineComponent({
   name: 'jt-home',

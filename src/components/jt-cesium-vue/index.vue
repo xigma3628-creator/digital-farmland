@@ -1,10 +1,14 @@
+<!--cesium入口组件-->
 <template>
   <div ref="jtCesiumVue" class="w-full h-full m-0 p-0">
     <slot />
   </div>
 </template>
 
+
 <script lang="ts">
+import { AddBoxEntities } from '@/libs/cesium/libs/add-box-enties'
+
 const LOADED_EVENT = 'loaded'
 
 import { defineComponent, ref, shallowRef, inject, onMounted, onUnmounted, nextTick } from 'vue'
@@ -207,11 +211,13 @@ export default defineComponent({
       initializeCesiumDefault()
       const viewer = initializeCesium()
       viewer.jt = new Jt(viewer)
+      // new AddBoxEntities(viewer)
       return viewer
     }
 
     onMounted(() => {
       const viewer = init()
+      new AddBoxEntities(viewer)
       context.emit(LOADED_EVENT, { viewer })
     })
 
