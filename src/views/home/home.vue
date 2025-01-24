@@ -1,36 +1,37 @@
 <template>
   <div>
     <div class="h-screen bg-green-200">
-      <jt-toolBar v-show="toolbarShow" ref="toolbar" />
+<!--      <jt-toolBar v-show="toolbarShow" ref="toolbar" />-->
 
       <div class="relative" :style="jtCesiumVueContainerStyle">
+      <!--overlay 是覆盖在地图地图上的界面交互层，前端html，css都写在这里        -->
         <overlay v-if="cesiumLoaded">
           <router-view></router-view>
 
-          <jtTerrainSampleChart class="z-50" />
+<!--          <jtTerrainSampleChart class="z-50" />-->
 
-          <template v-for="view in overlayDynamicViews" :key="view.uuid">
-            <component :is="view.name" class="z-50"></component>
-          </template>
+<!--          <template v-for="view in overlayDynamicViews" :key="view.uuid">-->
+<!--            <component :is="view.name" class="z-50"></component>-->
+<!--          </template>-->
 
-          <jtSideCollapse
-            v-show="browserPanelShow"
-            ref="browserPanel"
-            :default-pin="true"
-            width="300px"
-          >
-            <jtBrowserPanel />
-          </jtSideCollapse>
+<!--          <jtSideCollapse-->
+<!--            v-show="browserPanelShow"-->
+<!--            ref="browserPanel"-->
+<!--            :default-pin="true"-->
+<!--            width="300px"-->
+<!--          >-->
+<!--            <jtBrowserPanel />-->
+<!--          </jtSideCollapse>-->
 
-          <div
-            v-if="settingButtonShow"
-            class="absolute top-8 right-8 bg-gray-700 w-10 h-10 rounded-lg flex justify-center items-center border pointer-events-auto"
-            @click.stop="openSetting()"
-          >
-            <jt-icon name="setting" class="text-3xl text-gray-300" />
-          </div>
+<!--          <div-->
+<!--            v-if="settingButtonShow"-->
+<!--            class="absolute top-8 right-8 bg-gray-700 w-10 h-10 rounded-lg flex justify-center items-center border pointer-events-auto"-->
+<!--            @click.stop="openSetting()"-->
+<!--          >-->
+<!--            <jt-icon name="setting" class="text-3xl text-gray-300" />-->
+<!--          </div>-->
 
-          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />
+<!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
 
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
@@ -63,6 +64,7 @@ import jtDraggableResizable from '@/components/jt-draggable-resizable/index.vue'
 import { LayoutActionTypes } from '@/store/modules/jt-cesium-vue/modules/layout/action-types'
 
 import { LocationBarGetterTypes } from '@/store/modules/jt-cesium-vue/modules/locationbar/getter-types'
+import Jt from '@/libs/cesium/cesium-jt'
 
 export default defineComponent({
   name: 'jt-home',

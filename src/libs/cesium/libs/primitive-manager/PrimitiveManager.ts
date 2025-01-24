@@ -130,6 +130,9 @@ class PrimitiveManager {
 
     this.viewer.scene.primitives.add(c3Dtileset)
     this.syncJTPrimitives()
+    if(c3Dtileset.name==='成都建筑群'){
+      debugger
+    }
     return c3Dtileset
   }
 
@@ -168,7 +171,7 @@ class PrimitiveManager {
     const gltf =  await Model.fromGltfAsync({
       ...option,
     })
-    
+
 
     gltf._PriManagFlag = PrimitiveManager.PRIMITIVE_MANAGER_FLAG_VALUE
     gltf.name = option.name
