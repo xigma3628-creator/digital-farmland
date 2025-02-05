@@ -19,6 +19,10 @@ import {
 } from 'cesium'
 import uuid from '@/libs/utils/uuid'
 
+/*
+三维图层管理
+* ***/
+
 export type JTPrimitive = {
   name: string
   uuid: string

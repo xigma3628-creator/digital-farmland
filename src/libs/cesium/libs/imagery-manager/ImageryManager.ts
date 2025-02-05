@@ -5,6 +5,9 @@ import ImageryLayerCoordinateTransform, {
 } from '@/libs/cesium/libs/imagery-layer-coordinate-transform/ImageryLayerCoordinateTransform'
 import uuid from '@/libs/utils/uuid'
 
+/***
+ 二维图层管理
+ */
 export type ImagerySource = {
   name: string
   iconImageUrl: string
@@ -56,8 +59,8 @@ class ImageryManager {
     const provider = new (Cesium as any)[item.providerName]({
       ...(item.options || {}),
     })
-    
-    
+
+
 
     // provider.readyPromise.then((success: boolean): void => {
     //   if (item.coordinateType) {
@@ -70,7 +73,7 @@ class ImageryManager {
 
     //   item.afterReady && item.afterReady(viewer, success)
     // })
-    
+
     const layer = new ImageryLayer(provider)
     layer.name = item.name
     layer.uuid = uuid()

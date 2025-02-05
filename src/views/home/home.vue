@@ -2,36 +2,36 @@
   <div>
     <div class="h-screen bg-green-200">
 <!--      <jt-toolBar v-show="toolbarShow" ref="toolbar" />-->
-
+<!--      <el-button type="primary" @click.stop="test">Primary</el-button>-->
       <div class="relative" :style="jtCesiumVueContainerStyle">
-      <!--overlay 是覆盖在地图地图上的界面交互层，前端html，css都写在这里        -->
-        <overlay v-if="cesiumLoaded">
+        <!--overlay 是覆盖在地图地图上的界面交互层，前端html，css都写在这里        -->
+        <overlay v-if="cesiumLoaded" :z-index="999">
           <router-view></router-view>
 
-<!--          <jtTerrainSampleChart class="z-50" />-->
+          <jtTerrainSampleChart class="z-50" />
 
-<!--          <template v-for="view in overlayDynamicViews" :key="view.uuid">-->
-<!--            <component :is="view.name" class="z-50"></component>-->
-<!--          </template>-->
+          <!--          <template v-for="view in overlayDynamicViews" :key="view.uuid">-->
+          <!--            <component :is="view.name" class="z-50"></component>-->
+          <!--          </template>-->
 
-<!--          <jtSideCollapse-->
-<!--            v-show="browserPanelShow"-->
-<!--            ref="browserPanel"-->
-<!--            :default-pin="true"-->
-<!--            width="300px"-->
-<!--          >-->
-<!--            <jtBrowserPanel />-->
-<!--          </jtSideCollapse>-->
+          <!--          <jtSideCollapse-->
+          <!--            v-show="browserPanelShow"-->
+          <!--            ref="browserPanel"-->
+          <!--            :default-pin="true"-->
+          <!--            width="300px"-->
+          <!--          >-->
+          <!--            <jtBrowserPanel />-->
+          <!--          </jtSideCollapse>-->
 
-<!--          <div-->
-<!--            v-if="settingButtonShow"-->
-<!--            class="absolute top-8 right-8 bg-gray-700 w-10 h-10 rounded-lg flex justify-center items-center border pointer-events-auto"-->
-<!--            @click.stop="openSetting()"-->
-<!--          >-->
-<!--            <jt-icon name="setting" class="text-3xl text-gray-300" />-->
-<!--          </div>-->
+          <!--          <div-->
+          <!--            v-if="settingButtonShow"-->
+          <!--            class="absolute top-8 right-8 bg-gray-700 w-10 h-10 rounded-lg flex justify-center items-center border pointer-events-auto"-->
+          <!--            @click.stop="openSetting()"-->
+          <!--          >-->
+          <!--            <jt-icon name="setting" class="text-3xl text-gray-300" />-->
+          <!--          </div>-->
 
-<!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
+          <!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
 
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
@@ -49,7 +49,7 @@ import {
   watch,
   ComponentPublicInstance,
   onMounted,
-  nextTick,
+  nextTick
 } from 'vue'
 import { useStore } from '@/store'
 import overlay from '@/components/jt-overlay/index.vue'
@@ -76,7 +76,7 @@ export default defineComponent({
     jtSideCollapse,
     jtBrowserPanel,
     jtTerrainSampleChart,
-    jtDraggableResizable,
+    jtDraggableResizable
   },
   setup() {
     const store = useStore()
@@ -93,7 +93,7 @@ export default defineComponent({
       },
       set(val: boolean): void {
         store.dispatch(`jtCesiumVue/layout/${LayoutActionTypes.SET_SHOW_BROWSER_PANEL}`, val)
-      },
+      }
     })
 
     const toolbar = shallowRef<ComponentPublicInstance | null>(null)
@@ -103,7 +103,7 @@ export default defineComponent({
       },
       set(val: boolean): void {
         store.dispatch(`jtCesiumVue/layout/${LayoutActionTypes.SET_SHOW_TOOLBAR}`, val)
-      },
+      }
     })
     watch(toolbar, () => {
       calcToolbarHeight()
@@ -129,12 +129,12 @@ export default defineComponent({
       },
       set(val: boolean): void {
         store.dispatch(`jtCesiumVue/layout/${LayoutActionTypes.SET_SHOW_SETTING_BUTTON}`, val)
-      },
+      }
     })
 
     const jtCesiumVueContainerStyle = computed(() => {
       return {
-        height: `calc(100% - ${store.state.jtCesiumVue.layout.toolbarHeight}px)`,
+        height: `calc(100% - ${store.state.jtCesiumVue.layout.toolbarHeight}px)`
       }
     })
 
@@ -164,8 +164,13 @@ export default defineComponent({
         calcToolbarHeight()
       })
     }
+    const test = () => {
+      debugger
+      alert('十几斤')
+    }
 
     return {
+      test,
       cesiumLoaded,
       loaded,
       locationBarShow,
@@ -178,8 +183,8 @@ export default defineComponent({
       browserPanel,
       calcToolbarHeight,
       init,
-      settingButtonShow,
+      settingButtonShow
     }
-  },
+  }
 })
 </script>
