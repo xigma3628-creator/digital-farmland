@@ -104,7 +104,9 @@ class PrimitiveManager {
     pointCloudShading?: any
     imageBasedLightingFactor?: Cartesian2
     lightColor?: Cartesian3
-    luminanceAtZenith?: number
+    luminanceAtZenith?: number,
+    preloadAncestorsDepth?: number,
+    preloadSiblingsDepth?: number,
     sphericalHarmonicCoefficients?: Cartesian3[]
     specularEnvironmentMaps?: string
     backFaceCulling?: boolean

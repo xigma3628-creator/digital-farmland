@@ -34,7 +34,9 @@
           <!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
         <template v-if="cesiumLoaded">
-          <house-greenery-layer></house-greenery-layer>
+<!--          <house-greenery-layer></house-greenery-layer>-->
+          <farmland-layer></farmland-layer>
+          <water-layer></water-layer>
         </template>
 
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
@@ -69,10 +71,14 @@ import { LayoutActionTypes } from '@/store/modules/jt-cesium-vue/modules/layout/
 import { LocationBarGetterTypes } from '@/store/modules/jt-cesium-vue/modules/locationbar/getter-types'
 import Jt from '@/libs/cesium/cesium-jt'
 import HouseGreeneryLayer from '@/libs/cesium/layers/house-greenery-layer/index.vue'
+import FarmlandLayer from '@/libs/cesium/layers/farmland-layer/index.vue'
+import WaterLayer from '@/libs/cesium/layers/water-layer/index.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    WaterLayer,
+    FarmlandLayer,
     HouseGreeneryLayer,
     jtCesiumVue,
     jtToolBar,
