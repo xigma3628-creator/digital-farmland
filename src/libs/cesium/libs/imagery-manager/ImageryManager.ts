@@ -100,6 +100,22 @@ class ImageryManager {
     return this.viewer.imageryLayers.get(this.imageries[index].cesiumLayerIndex)
   }
 
+  /**
+   * 添加高德影像底图
+   * */
+  public addGdImagery(){
+    const { viewer } = this
+    viewer.imageryLayers.addImageryProvider(
+      new Cesium.UrlTemplateImageryProvider({
+        url: "https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+        subdomains: ["1", "2", "3", "4"], // 子域名轮询
+        tilingScheme: new Cesium.WebMercatorTilingScheme(), // 指定 Web 墨卡托投影
+        maximumLevel: 18, // 最大缩放级别
+        credit: "高德地图", // 版权信息（可选）
+      })
+    )
+  }
+
   public removeLayer(index: number): void {
     this.viewer.imageryLayers.remove(this.getLayer(index))
     this.syncImageries()

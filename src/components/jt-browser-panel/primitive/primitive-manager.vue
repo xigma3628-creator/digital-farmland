@@ -193,13 +193,14 @@ export default defineComponent({
     }
 
     const init = (): void => {
-      ;(cesiumRef || {}).viewer?.jt?.primitiveManager.removeAll()
-
-      if (route.query[UrlQuery.DemoMode]) {
-        initDemoMode()
-      } else {
-        initDefaultData()
-      }
+      // ;(cesiumRef || {}).viewer?.jt?.primitiveManager.removeAll()
+      // debugger
+      // if (route.query[UrlQuery.DemoMode]) {
+      //   initDemoMode()
+      // } else {
+      //   initDefaultData()
+      // }
+      initDefaultData();
     }
 
     const initDemoMode = (): void => {
@@ -229,46 +230,50 @@ export default defineComponent({
       if (!pm) {
         return
       }
-      pm.addGltf({
-        name: '精模',
-        url: sampleData.rc,
-        modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(
-          Cesium.Cartesian3.fromDegrees(103.6144, 30.95525207451468, 0.0),
-          new Cesium.HeadingPitchRoll(Cesium.Math.PI_OVER_TWO, 0, 0)
-        ),
-        show: false,
-      })
-
-      pm.add3DTileset({
-        name: 'iPad Pro Lidar(point cloud)',
-        url: sampleData['my-home'],
-        show: false,
-      })
-
-      pm.add3DTileset({
-        name: '成都建筑群',
-        url: sampleData['cd-buildings'],
-        show: false,
-        // debugColorizeTiles: true,
-        // debugWireframe: true,
-        // debugShowBoundingVolume: true,
-        // debugShowGeometricError: true,
-        // debugShowContentBoundingVolume: true,
-        // debugShowViewerRequestVolume: true,
-        // debugShowMemoryUsage: true,
-      })
-
-      const w = pm.add3DTileset({
-        name: '简模001',
-        url: sampleData['shp-factory'],
-      })
-      change3DTilesetHeight(w as Cesium.Cesium3DTileset, -673)
-
-      const e = pm.add3DTileset({
-        name: '简模002',
-        url: sampleData.apartment,
-      })
-      change3DTilesetHeight(e as Cesium.Cesium3DTileset, -670)
+      // pm.addGltf({
+      //   name: '精模',
+      //   url: sampleData.rc,
+      //   modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(
+      //     Cesium.Cartesian3.fromDegrees(103.6144, 30.95525207451468, 0.0),
+      //     new Cesium.HeadingPitchRoll(Cesium.Math.PI_OVER_TWO, 0, 0)
+      //   ),
+      //   show: false,
+      // })
+      //
+      // pm.add3DTileset({
+      //   name: 'iPad Pro Lidar(point cloud)',
+      //   url: sampleData['my-home'],
+      //   show: false,
+      // })
+      //
+      // pm.add3DTileset({
+      //   name: '成都建筑群',
+      //   url: sampleData['cd-buildings'],
+      //   show: false,
+      //   // debugColorizeTiles: true,
+      //   // debugWireframe: true,
+      //   // debugShowBoundingVolume: true,
+      //   // debugShowGeometricError: true,
+      //   // debugShowContentBoundingVolume: true,
+      //   // debugShowViewerRequestVolume: true,
+      //   // debugShowMemoryUsage: true,
+      // })
+      //
+      // const w = pm.add3DTileset({
+      //   name: '简模001',
+      //   url: sampleData['shp-factory'],
+      // })
+      // change3DTilesetHeight(w as Cesium.Cesium3DTileset, -673)
+      //
+      // const e = pm.add3DTileset({
+      //   name: '简模002',
+      //   url: sampleData.apartment,
+      // })
+      // change3DTilesetHeight(e as Cesium.Cesium3DTileset, -670)
+      // pm.add3DTileset({
+      //   name:'广州南沙建筑物绿化瓦片',
+      //   url:'http://192.168.31.162:42225/distribution/model/hjri2qqrmiiu/tileset.json'
+      // })
 
       syncJTPrimitive()
     }

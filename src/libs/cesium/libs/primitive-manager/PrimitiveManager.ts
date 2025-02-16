@@ -67,10 +67,10 @@ class PrimitiveManager {
     return this.jtPrimitives
   }
 
-  public add3DTileset(option: {
+  public async add3DTileset(option: {
     name: string
     // cesium default
-    url: Resource | string | Promise<Resource> | Promise<string>
+    url: string
     show?: boolean
     modelMatrix?: Matrix4
     shadows?: ShadowMode
@@ -122,11 +122,11 @@ class PrimitiveManager {
     debugShowRenderingStatistics?: boolean
     debugShowMemoryUsage?: boolean
     debugShowUrl?: boolean
-  }): Cesium3DTileset {
-    const c3Dtileset = new Cesium3DTileset({
-      ...option,
-    })
-
+  }): Promise<Cesium3DTileset> {
+    // const c3Dtileset = new Cesium3DTileset({
+    //   ...option,
+    // })
+    const c3Dtileset = await Cesium3DTileset.fromUrl(option.url,{...option});
     c3Dtileset._PriManagFlag = PrimitiveManager.PRIMITIVE_MANAGER_FLAG_VALUE
     c3Dtileset.name = option.name
     c3Dtileset.uuid = uuid()
@@ -134,9 +134,9 @@ class PrimitiveManager {
 
     this.viewer.scene.primitives.add(c3Dtileset)
     this.syncJTPrimitives()
-    if(c3Dtileset.name==='成都建筑群'){
-      debugger
-    }
+    // if(c3Dtileset.name==='成都建筑群'){
+    //   debugger
+    // }
     return c3Dtileset
   }
 

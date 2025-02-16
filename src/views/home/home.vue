@@ -14,14 +14,14 @@
           <!--            <component :is="view.name" class="z-50"></component>-->
           <!--          </template>-->
 
-          <!--          <jtSideCollapse-->
-          <!--            v-show="browserPanelShow"-->
-          <!--            ref="browserPanel"-->
-          <!--            :default-pin="true"-->
-          <!--            width="300px"-->
-          <!--          >-->
-          <!--            <jtBrowserPanel />-->
-          <!--          </jtSideCollapse>-->
+<!--                    <jtSideCollapse-->
+<!--                      v-show="browserPanelShow"-->
+<!--                      ref="browserPanel"-->
+<!--                      :default-pin="true"-->
+<!--                      width="300px"-->
+<!--                    >-->
+<!--                      <jtBrowserPanel />-->
+<!--                    </jtSideCollapse>-->
 
           <!--          <div-->
           <!--            v-if="settingButtonShow"-->
@@ -33,6 +33,9 @@
 
           <!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
+        <template v-if="cesiumLoaded">
+          <house-greenery-layer></house-greenery-layer>
+        </template>
 
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
       </div>
@@ -65,10 +68,12 @@ import { LayoutActionTypes } from '@/store/modules/jt-cesium-vue/modules/layout/
 
 import { LocationBarGetterTypes } from '@/store/modules/jt-cesium-vue/modules/locationbar/getter-types'
 import Jt from '@/libs/cesium/cesium-jt'
+import HouseGreeneryLayer from '@/libs/cesium/layers/house-greenery-layer/index.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    HouseGreeneryLayer,
     jtCesiumVue,
     jtToolBar,
     overlay,

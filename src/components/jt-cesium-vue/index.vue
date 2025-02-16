@@ -129,6 +129,7 @@ export default defineComponent({
       const rectangle = Cesium.Rectangle.fromDegrees(west, south, east, north)
       Cesium.Camera.DEFAULT_VIEW_FACTOR = 0
       Cesium.Camera.DEFAULT_VIEW_RECTANGLE = rectangle
+
       const { cesiumToken } = props
       if (cesiumToken) {
         Cesium.Ion.defaultAccessToken = cesiumToken
@@ -186,7 +187,8 @@ export default defineComponent({
       })
       viewer.scene.globe.depthTestAgainstTerrain = props.depthTestAgainstTerrain
       viewer.resolutionScale = window.devicePixelRatio
-      viewer.scene.postProcessStages.fxaa.enabled = props.fxaaEnable
+      viewer.scene.postProcessStages.fxaa.enabled = props.fxaaEnable;
+      viewer.scene.debugShowFramesPerSecond = true;
 
       viewer.scene.primitives.removeAll()
 
@@ -217,7 +219,7 @@ export default defineComponent({
 
     onMounted(() => {
       const viewer = init()
-      new AddBoxEntities(viewer)
+      viewer.jt?.imageryManager.addGdImagery();
       context.emit(LOADED_EVENT, { viewer })
     })
 

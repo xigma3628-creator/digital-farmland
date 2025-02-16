@@ -165,8 +165,8 @@ export default [
       iconImageUrl: 'amap_img.png',
       name: '高德影像底图',
       options: {
-        url: 'https://webst{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-        subdomains: ['01', '02', '03', '04'],
+        url: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+        subdomains: ["1", "2", "3", "4"],
       },
       providerName: 'UrlTemplateImageryProvider',
       coordinateType: CoordinateType.Gcj02,

@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
-    "cesium": "^1.100.0",
+    "cesium": "^1.126.0",
     "core-js": "^3.26.1",
     "echarts": "^5.4.1",
     "element-plus": "^2.9.3",
