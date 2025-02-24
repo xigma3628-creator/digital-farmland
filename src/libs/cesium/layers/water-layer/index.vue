@@ -69,13 +69,12 @@ export default defineComponent({
           });
           return instance;
         })
-        debugger
         viewer.scene.primitives.add(new Cesium.Primitive({
           geometryInstances,
           appearance: appearance
         }))
       }catch (e){
-        debugger
+
         console.error(e)
       }
     }

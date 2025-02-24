@@ -34,9 +34,10 @@
           <!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
         <template v-if="cesiumLoaded">
-<!--          <house-greenery-layer></house-greenery-layer>-->
+          <house-greenery-layer></house-greenery-layer>
           <farmland-layer></farmland-layer>
           <water-layer></water-layer>
+<!--          <test3d-tiles-layer></test3d-tiles-layer>-->
         </template>
 
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
@@ -73,10 +74,12 @@ import Jt from '@/libs/cesium/cesium-jt'
 import HouseGreeneryLayer from '@/libs/cesium/layers/house-greenery-layer/index.vue'
 import FarmlandLayer from '@/libs/cesium/layers/farmland-layer/index.vue'
 import WaterLayer from '@/libs/cesium/layers/water-layer/index.vue'
+import Test3dTilesLayer from '@/libs/cesium/layers/test-3d-tiles-layer/index.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    Test3dTilesLayer,
     WaterLayer,
     FarmlandLayer,
     HouseGreeneryLayer,
@@ -176,7 +179,7 @@ export default defineComponent({
       })
     }
     const test = () => {
-      debugger
+
       alert('十几斤')
     }
 

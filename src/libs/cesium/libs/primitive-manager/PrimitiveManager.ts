@@ -16,6 +16,8 @@ import {
   DistanceDisplayCondition,
   ColorBlendMode,
   Credit,
+  Cartographic,
+  Math
 } from 'cesium'
 import uuid from '@/libs/utils/uuid'
 
@@ -135,6 +137,24 @@ class PrimitiveManager {
     c3Dtileset.show = option.show || false
 
     this.viewer.scene.primitives.add(c3Dtileset)
+
+    // 获取模型的包围盒中心点
+    const boundingVolume = c3Dtileset.boundingSphere;
+    const center = Cartesian3.fromElements(
+      boundingVolume.center.x,
+      boundingVolume.center.y,
+      boundingVolume.center.z
+    );
+
+    // 将包围盒的中心点转换为经纬度
+    const cartographic = Cartographic.fromCartesian(center);
+    if(cartographic){
+      const longitude = Math.toDegrees(cartographic.longitude);
+      const latitude = Math.toDegrees(cartographic.latitude);
+      const altitude = cartographic.height;
+
+      console.log('模型原点经纬度:', longitude, latitude, altitude);
+    }
     this.syncJTPrimitives()
     // if(c3Dtileset.name==='成都建筑群'){
     //   debugger
