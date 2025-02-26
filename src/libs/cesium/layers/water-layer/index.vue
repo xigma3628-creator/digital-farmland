@@ -1,5 +1,7 @@
 <template>
-  <div style="display: none;"></div>
+  <div style="display: none;">
+
+  </div>
 </template>
 
 <script lang="ts">

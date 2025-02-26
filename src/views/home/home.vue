@@ -34,6 +34,7 @@
           <!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
         <template v-if="cesiumLoaded">
+          <crop-layer></crop-layer>
           <house-greenery-layer></house-greenery-layer>
           <farmland-layer></farmland-layer>
           <water-layer></water-layer>
@@ -75,10 +76,12 @@ import HouseGreeneryLayer from '@/libs/cesium/layers/house-greenery-layer/index.
 import FarmlandLayer from '@/libs/cesium/layers/farmland-layer/index.vue'
 import WaterLayer from '@/libs/cesium/layers/water-layer/index.vue'
 import Test3dTilesLayer from '@/libs/cesium/layers/test-3d-tiles-layer/index.vue'
+import CropLayer from '@/libs/cesium/layers/crop-layer/index.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    CropLayer,
     Test3dTilesLayer,
     WaterLayer,
     FarmlandLayer,
