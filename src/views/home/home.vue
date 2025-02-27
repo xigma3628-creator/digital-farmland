@@ -3,6 +3,7 @@
     <div class="h-screen bg-green-200">
 <!--      <jt-toolBar v-show="toolbarShow" ref="toolbar" />-->
 <!--      <el-button type="primary" @click.stop="test">Primary</el-button>-->
+<!--      <el-button type="primary" @click="test" class="z-50">作物识别图层</el-button>-->
       <div class="relative" :style="jtCesiumVueContainerStyle">
         <!--overlay 是覆盖在地图地图上的界面交互层，前端html，css都写在这里        -->
         <overlay v-if="cesiumLoaded" :z-index="999">
@@ -56,7 +57,7 @@ import {
   watch,
   ComponentPublicInstance,
   onMounted,
-  nextTick
+  nextTick, inject
 } from 'vue'
 import { useStore } from '@/store'
 import overlay from '@/components/jt-overlay/index.vue'
@@ -77,6 +78,7 @@ import FarmlandLayer from '@/libs/cesium/layers/farmland-layer/index.vue'
 import WaterLayer from '@/libs/cesium/layers/water-layer/index.vue'
 import Test3dTilesLayer from '@/libs/cesium/layers/test-3d-tiles-layer/index.vue'
 import CropLayer from '@/libs/cesium/layers/crop-layer/index.vue'
+import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 
 export default defineComponent({
   name: 'jt-home',
@@ -98,6 +100,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const cesiumLoaded = ref<boolean>(false)
+    const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
 
     const locationBarShow = computed((): boolean => {
       return store.getters[`jtCesiumVue/locationbar/${LocationBarGetterTypes.ALL_SHOW}`]
@@ -182,8 +185,11 @@ export default defineComponent({
       })
     }
     const test = () => {
-
-      alert('十几斤')
+      // if (!cesiumRef || !cesiumRef.viewer) {
+      //   return;
+      // }
+      // cesiumRef.viewer.jt?.layerManager.setLayerVisible('crop-layer',false)
+      // alert('十几斤')
     }
 
     return {
