@@ -1,4 +1,4 @@
-import { BillboardCollection, EntityCollection, Primitive, PrimitiveCollection, Viewer } from 'cesium'
+import { BillboardCollection, CustomDataSource, EntityCollection, Primitive, PrimitiveCollection, Viewer } from 'cesium'
 
 export interface LayerInterface{
   show:boolean,
@@ -31,6 +31,8 @@ class LayerManager {
       this.viewer.scene.primitives.add(layer.collection);
     }else if(layer.collection instanceof Primitive){
       this.viewer.scene.primitives.add(layer.collection);
+    }else if(layer.collection instanceof CustomDataSource){
+      this.viewer.dataSources.add(layer.collection);
     }
   };
 

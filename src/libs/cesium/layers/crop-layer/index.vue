@@ -88,6 +88,9 @@ export default defineComponent({
         console.error(e)
       }
     }
+    /**
+     * 悬浮tooltip
+     * */
     const cesiumEventHandler = () => {
       if (!cesiumRef || !viewr) return
       const handler = new ScreenSpaceEventHandler(viewr.scene.canvas)
