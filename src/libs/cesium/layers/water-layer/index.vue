@@ -15,11 +15,13 @@ import {
 } from '@/store/modules/jt-cesium-vue/modules/cesium-data/modules/jt-primitive/action-types'
 import calculatePrimitiveCenter from '@/libs/cesium/libs/calculate-primitive-center'
 import * as Cesium from 'cesium'
+import { Primitive, PrimitiveCollection } from 'cesium'
 export default defineComponent({
   name: 'water-layer',
   setup() {
     const store = useStore();
-    const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
+    const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY);
+    const collection:PrimitiveCollection=new PrimitiveCollection();
     const addGeoJson = async (viewer: Cesium.Viewer) => {
       const  height=3.0;
       try {
@@ -71,10 +73,21 @@ export default defineComponent({
           });
           return instance;
         })
-        viewer.scene.primitives.add(new Cesium.Primitive({
-          geometryInstances,
-          appearance: appearance
-        }))
+        collection.add(
+          new Cesium.Primitive({
+            geometryInstances,
+            appearance: appearance
+          })
+        )
+        viewer.jt?.layerManager.registerLayer('water-layer',{
+          show:true,
+          zIndex:0,
+          collection
+        })
+        // viewer.scene.primitives.add(new Cesium.Primitive({
+        //   geometryInstances,
+        //   appearance: appearance
+        // }))
       }catch (e){
 
         console.error(e)

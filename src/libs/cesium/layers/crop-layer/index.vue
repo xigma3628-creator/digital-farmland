@@ -68,7 +68,11 @@ export default defineComponent({
             })
           }
         })
-        viewer.scene.primitives.add(collection);
+        viewer.jt?.layerManager.registerLayer('crop-layer',{
+          show:true,
+          zIndex:0,
+          collection
+        })
       }catch (e){
 
         console.error(e)

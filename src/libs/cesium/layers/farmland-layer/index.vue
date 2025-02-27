@@ -52,9 +52,9 @@ export default defineComponent({
         strokeWidth: 3,
         clampToGround: false, // 必须关闭贴地模式
         heightReference: Cesium.HeightReference.NONE // 明确高度参考系
-      }))
+      }));
       getGeoJson.then(res => {
-        console.log('res', res)
+        // console.log('res', res)
         const entities = res.entities.values
         entities.forEach((entity, index) => {
           if (entity.polygon) {

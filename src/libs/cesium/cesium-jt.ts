@@ -14,6 +14,7 @@ import PrimitiveManager from '@/libs/cesium/libs/primitive-manager/PrimitiveMana
 import ClippingPlane from '@/libs/cesium/libs/clipping-plane/ClippingPlane'
 import Viewshed from '@/libs/cesium/libs/viewshed/Viewshed'
 import type { Option } from '@/libs/cesium/libs/viewshed/Viewshed'
+import LayerManager from '@/libs/cesium/libs/layer-manager/LayerManager'
 
 class Jt {
   protected viewer: Cesium.Viewer
@@ -107,6 +108,14 @@ class Jt {
       this._imageryManager = new ImageryManager(this.viewer)
     }
     return this._imageryManager
+  }
+
+  private _layerManager?: LayerManager
+  public get layerManager(): LayerManager {
+    if (!this._layerManager) {
+      this._layerManager = new LayerManager(this.viewer)
+    }
+    return this._layerManager
   }
 
   private _primitiveManager?: PrimitiveManager
