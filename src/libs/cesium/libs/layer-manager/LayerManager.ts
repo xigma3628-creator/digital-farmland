@@ -23,6 +23,9 @@ class LayerManager {
       throw new Error(`图层 ${id} 重复注册！`)
     }
     this.layers.set(id, layer);
+    // if(id=='border-layer'){
+    //   debugger
+    // }
     if(layer.collection instanceof EntityCollection){
       this.viewer.entities.add(layer.collection);
     }else if(layer.collection instanceof PrimitiveCollection){
@@ -32,6 +35,7 @@ class LayerManager {
     }else if(layer.collection instanceof Primitive){
       this.viewer.scene.primitives.add(layer.collection);
     }else if(layer.collection instanceof CustomDataSource){
+      // debugger
       this.viewer.dataSources.add(layer.collection);
     }
   };

@@ -9,8 +9,11 @@ export  default class BorderWallMaterialProperty {
   private duration:number;
   private trailImage:any;
   private _time:number;
-  private color:Cesium.ConstantProperty;
-  constructor(options) {
+  public color:Cesium.ConstantProperty;
+  private isConstant:boolean;
+  private viewer:Cesium.Viewer;
+  constructor(viewer:Cesium.Viewer,options:any) {
+    this.viewer = viewer;
     this.MaterialType='wallType' + parseInt(String(Math.random() * 1000));
     this._definitionChanged=new Cesium.Event();
     this._color=undefined;
@@ -19,6 +22,7 @@ export  default class BorderWallMaterialProperty {
     this.trailImage=options.trailImage;
     this._time=(new Date()).getTime();
     this.color = options.color ||Cesium.Color.BLUE;
+    this.isConstant=false;
 
     this.register();
   }
@@ -35,8 +39,15 @@ export  default class BorderWallMaterialProperty {
     if(!Cesium.defined(result)) {
       result={};
     }
-    result.color=this.getValueOrClonedDefault(this._color,time,Cesium.Color.WHITE,result.color);
-
+    // debugger
+    result.image=this.trailImage;
+    result.color=this.color;
+    // debugger
+    if(this.duration){
+      result.time = (((new Date()).getTime() - this._time) % this.duration) / this.duration;
+    }
+    // console.log('res',result)
+    this.viewer.scene.requestRender();
     return result;
   }
   // Cesium.Property.equals(this._color, other._color)
@@ -55,6 +66,7 @@ export  default class BorderWallMaterialProperty {
   ) {
     let value:any;
     if (Cesium.defined(property)) {
+      debugger
       value = property.getValue(time, result);
     }
     if (!Cesium.defined(value)) {
@@ -64,16 +76,18 @@ export  default class BorderWallMaterialProperty {
   };
 
 
-  private _getDirectionWallShader(options) {
+  private _getDirectionWallShader(options:any) {
     if (options && options.get) {
       var materail = "czm_material czm_getMaterial(czm_materialInput materialInput)\n\
       {\n\
           czm_material material = czm_getDefaultMaterial(materialInput);\n\
-          vec2 st = materialInput.st;";
+          vec2 st = materialInput.st;\n\
+          "
       if (options.freely == "vertical") { //（由下到上）
-        materail += "vec4 colorImage = texture2D(image, vec2(fract(st.s), fract(float(" + options.count + ")*st.t" + options.direction + " time)));\n\ ";
+        materail += "vec4 colorImage = color*(texture(image, vec2(fract(st.s), fract(float(" + options.count + ")*st.t" + options.direction + " time))).r);\n\ ";
+        // materail += "vec4 colorImage =vec4(1.0,0.0,0.0,st.t);\n\ ";
       } else { //（逆时针）
-        materail += "vec4 colorImage = texture2D(image, vec2(fract(float(" + options.count + ")*st.s " + options.direction + " time), fract(st.t)));\n\ ";
+        materail += "vec4 colorImage = texture(image, vec2(fract(float(" + options.count + ")*st.s " + options.direction + " time), fract(st.t)));\n\ ";
       }
       //泛光
       materail += `vec4 fragColor;
@@ -93,7 +107,7 @@ export  default class BorderWallMaterialProperty {
       fabric: {
         type: this.MaterialType,
         uniforms: {
-          color: new Cesium.Color(1.0, 0.0, 0.0, 0.1),
+          color: this.color,
           image: Cesium.Material.DefaultImageId,
           time: -20
         },

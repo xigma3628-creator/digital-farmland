@@ -36,10 +36,10 @@
         </overlay>
         <template v-if="cesiumLoaded">
           <border-layer></border-layer>
-          <crop-layer></crop-layer>
-          <house-greenery-layer></house-greenery-layer>
+<!--          <crop-layer></crop-layer>-->
+<!--          <house-greenery-layer></house-greenery-layer>-->
           <farmland-layer></farmland-layer>
-          <water-layer></water-layer>
+<!--          <water-layer></water-layer>-->
 <!--          <test3d-tiles-layer></test3d-tiles-layer>-->
         </template>
 
