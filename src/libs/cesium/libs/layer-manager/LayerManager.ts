@@ -3,7 +3,8 @@ import { BillboardCollection, CustomDataSource, EntityCollection, Primitive, Pri
 export interface LayerInterface{
   show:boolean,
   zIndex:number,
-  collection:any
+  collection:any,
+  ex?:any
 }
 
 

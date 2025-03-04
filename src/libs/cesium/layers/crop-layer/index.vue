@@ -105,6 +105,7 @@ export default defineComponent({
         if (
           Cesium.defined(pickedObject)
           && pickedObject.primitive instanceof Billboard
+          &&pickedObject.id
           && pickedObject.id.layer === layerName
         ) {
           const { properties } = pickedObject.id
