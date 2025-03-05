@@ -16,6 +16,7 @@ import { CesiumRef, CESIUM_REF_KEY } from '@/libs/cesium/cesium-vue'
 import * as Cesium from 'cesium'
 import 'cesium/Source/Widgets/widgets.css'
 import Jt from '@/libs/cesium/cesium-jt'
+import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
 
 export default defineComponent({
   name: 'jt-cesium-vue',
@@ -178,6 +179,8 @@ export default defineComponent({
         shadows: props.shadows,
         terrainShadows: props.terrainShadows,
         msaaSamples: props.msaa,
+        // 设置能够播放动画
+        shouldAnimate:true
       }
 
       const el = jtCesiumVue.value as HTMLElement
@@ -213,6 +216,7 @@ export default defineComponent({
       initializeCesiumDefault()
       const viewer = initializeCesium()
       viewer.jt = new Jt(viewer)
+      const droneCruise=viewer.jt.droneCruise;
       // new AddBoxEntities(viewer)
       return viewer
     }

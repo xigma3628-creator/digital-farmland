@@ -15,6 +15,7 @@ import ClippingPlane from '@/libs/cesium/libs/clipping-plane/ClippingPlane'
 import Viewshed from '@/libs/cesium/libs/viewshed/Viewshed'
 import type { Option } from '@/libs/cesium/libs/viewshed/Viewshed'
 import LayerManager from '@/libs/cesium/libs/layer-manager/LayerManager'
+import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
 
 class Jt {
   protected viewer: Cesium.Viewer
@@ -116,6 +117,14 @@ class Jt {
       this._layerManager = new LayerManager(this.viewer)
     }
     return this._layerManager
+  }
+
+  private _droneCruise?: DroneCruise
+  public get droneCruise(): DroneCruise{
+    if (!this._droneCruise) {
+      this._droneCruise = new DroneCruise(this.viewer)
+    }
+    return this._droneCruise
   }
 
   private _primitiveManager?: PrimitiveManager
