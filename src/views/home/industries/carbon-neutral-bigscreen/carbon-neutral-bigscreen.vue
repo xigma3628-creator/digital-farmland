@@ -5,15 +5,19 @@
     <div
       class="header px-6 h-20 flex-grow-0 flex-shrink-0 pointer-events-auto flex flex-row items-center justify-between"
     >
-      <div class="title text-white font-bold text-2xl">XXX市“碳中和”监控指挥平台</div>
+      <div class="title text-white font-bold text-2xl">智慧农田</div>
       <nowDate class="text-white" />
     </div>
     <div class="content flex-grow flex flex-row">
       <input type="checkbox" id="left-checkBox" class="hidden" />
       <div class="left pointer-events-auto flex flex-col">
+        <h3 class="text-white">无人机巡航</h3>
         <el-button @click="startDroneCruise">开启无人机巡检</el-button>
         <el-button @click="pausedDroneCruise">暂停/继续</el-button>
         <el-button @click="stopDroneCruise">停止无人机巡检</el-button>
+        <h3 class="text-white">入侵检测</h3>
+        <el-button @click="startIntrusionDetection">开始入侵检测</el-button>
+        <h3 class="text-white">默认视角</h3>
         <el-button @click="home">回到默认视角</el-button>
       </div>
       <div class="center flex-grow flex flex-col-reverse">
@@ -39,6 +43,7 @@ import bsEnergyConsumptionAveragePerDay from './components/bs-energy-consumption
 import bsEnergyConsumptionPerPerson from './components/bs-energy-consumption-per-person.vue'
 import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
+import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 
 export default defineComponent({
   name: 'carbon-neutral-bigscreen',
@@ -69,6 +74,20 @@ export default defineComponent({
     const pausedDroneCruise = () => {
       viewer?.jt?.droneCruise.pause();
     }
+    const startIntrusionDetection= () => {
+      if(!viewer) return;
+      const borderlayer=viewer?.jt?.layerManager.getLayer('border-layer');
+      const intrusionDetection=new IntrusionDetection(viewer);
+      intrusionDetection.isInsideCallback=function(){
+        borderlayer?.instance.ctx.setIntrude(true)
+      }
+      intrusionDetection.noInsideCallback=function(){
+        borderlayer?.instance.ctx.setIntrude(false)
+      }
+      setTimeout(()=>{
+        intrusionDetection.startPersonTrack();
+      },2000)
+    }
     const home = () => {
       viewer?.jt?.flyTo.flyToHome()
     }
@@ -76,7 +95,8 @@ export default defineComponent({
       stopDroneCruise,
       startDroneCruise,
       pausedDroneCruise,
-      home
+      home,
+      startIntrusionDetection
     }
   },
 })

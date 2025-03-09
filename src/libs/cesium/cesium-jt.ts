@@ -16,6 +16,7 @@ import Viewshed from '@/libs/cesium/libs/viewshed/Viewshed'
 import type { Option } from '@/libs/cesium/libs/viewshed/Viewshed'
 import LayerManager from '@/libs/cesium/libs/layer-manager/LayerManager'
 import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
+import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 
 class Jt {
   protected viewer: Cesium.Viewer
@@ -125,6 +126,14 @@ class Jt {
       this._droneCruise = new DroneCruise(this.viewer,{})
     }
     return this._droneCruise
+  }
+
+  private _intrusionDetection?: IntrusionDetection
+  public get intrusionDetection(): IntrusionDetection{
+    if (!this._intrusionDetection) {
+      this._intrusionDetection = new IntrusionDetection(this.viewer)
+    }
+    return this._intrusionDetection;
   }
 
   private _primitiveManager?: PrimitiveManager

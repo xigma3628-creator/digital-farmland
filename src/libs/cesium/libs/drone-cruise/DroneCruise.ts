@@ -206,8 +206,6 @@ class DroneCruise {
     // console.log('重置前',this.viewer.camera.direction)
     this.state=DroneCruiseState.STOPPING;
     this.viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
-    this.viewer.scene.screenSpaceCameraController.enableRotate = true;
-    this.viewer.scene.screenSpaceCameraController.enableZoom = true;
     this.viewer.jt?.flyTo.flyToHome();
     const temp=this.viewer.clock.currentTime.clone();
     this.viewer.clock.stopTime=temp;

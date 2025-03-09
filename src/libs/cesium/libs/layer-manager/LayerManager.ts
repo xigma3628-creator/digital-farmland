@@ -4,6 +4,7 @@ export interface LayerInterface{
   show:boolean,
   zIndex:number,
   collection:any,
+  instance?:any,
   ex?:any
 }
 

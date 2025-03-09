@@ -7,7 +7,7 @@
 <script lang="ts">
 
 
-import { defineComponent, inject, onMounted, onUnmounted } from 'vue'
+import { defineComponent, getCurrentInstance, inject, onMounted, onUnmounted } from 'vue'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import * as Cesium from 'cesium'
 import { Cartesian3, Cartographic, CustomDataSource } from 'cesium'
@@ -23,6 +23,7 @@ export default defineComponent({
     const datasouce: CustomDataSource = new CustomDataSource('wall')
     let material: any = null;
     let timer: any = null;
+    const instance = getCurrentInstance()
 
 
     /**
@@ -65,10 +66,13 @@ export default defineComponent({
             material: material
           }
         })
+        const a=instance;
+        debugger
         viewr?.jt?.layerManager.registerLayer('border-layer', {
           show: true,
           collection: datasouce,
           zIndex: 0,
+          instance:instance,
           ex:borderPos
         })
 
