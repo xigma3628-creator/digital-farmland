@@ -4,6 +4,7 @@
 <!--      <jt-toolBar v-show="toolbarShow" ref="toolbar" />-->
 <!--      <el-button type="primary" @click.stop="test">Primary</el-button>-->
 <!--      <el-button type="primary" @click="test" class="z-50">作物识别图层</el-button>-->
+      <bigscreen></bigscreen>
       <div class="relative" :style="jtCesiumVueContainerStyle">
         <!--overlay 是覆盖在地图地图上的界面交互层，前端html，css都写在这里        -->
         <overlay v-if="cesiumLoaded" :z-index="999">
@@ -81,10 +82,12 @@ import Test3dTilesLayer from '@/libs/cesium/layers/test-3d-tiles-layer/index.vue
 import CropLayer from '@/libs/cesium/layers/crop-layer/index.vue'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import BorderLayer from '@/libs/cesium/layers/border-layer/index.vue'
+import Bigscreen from '@/views/home/bigscreen/bigscreen.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    Bigscreen,
     BorderLayer,
     CropLayer,
     Test3dTilesLayer,

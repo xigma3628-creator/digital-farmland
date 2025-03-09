@@ -68,7 +68,7 @@ export default defineComponent({
 
           }
         })
-        viewer.zoomTo(entities)
+        // viewer.zoomTo(entities)
       })
     }
 

@@ -122,7 +122,7 @@ class Jt {
   private _droneCruise?: DroneCruise
   public get droneCruise(): DroneCruise{
     if (!this._droneCruise) {
-      this._droneCruise = new DroneCruise(this.viewer)
+      this._droneCruise = new DroneCruise(this.viewer,{})
     }
     return this._droneCruise
   }

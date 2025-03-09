@@ -3,6 +3,7 @@ import Home from '@/views/home'
 import IndustryPanels from '@/views/home/industries'
 import CarbonNeutalBigscreen from '@/views/home/industries/carbon-neutral-bigscreen'
 import Test from '@/views/test/test.vue'
+import Bigscreen from '@/views/home/bigscreen/bigscreen.vue'
 
 // const routes: Array<RouteRecordRaw> = [
 //   {
@@ -27,6 +28,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'carbon-neutral-bigscreen',
         name: 'carbon-neutral-bigscreen',
         component: CarbonNeutalBigscreen,
+      },
+      {
+        path: 'bigscreen',
+        name: 'bigscreen',
+        component: Bigscreen,
       },
     ],
   },

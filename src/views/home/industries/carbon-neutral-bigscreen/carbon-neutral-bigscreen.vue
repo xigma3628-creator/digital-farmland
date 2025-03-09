@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cnb fixed top-0 bottom-0 left-0 right-0 overflow-hidden flex flex-col bg-gray-400 bg-opacity-30"
+    class="cnb fixed top-0 bottom-0 left-0 right-0 overflow-hidden flex flex-col"
   >
     <div
       class="header px-6 h-20 flex-grow-0 flex-shrink-0 pointer-events-auto flex flex-row items-center justify-between"
@@ -11,41 +11,22 @@
     <div class="content flex-grow flex flex-row">
       <input type="checkbox" id="left-checkBox" class="hidden" />
       <div class="left pointer-events-auto flex flex-col">
-        <!-- <label class="handler" for="left-checkBox">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </label> -->
-        <div class="flex-1">
-          <bs-overview />
-        </div>
-        <div class="flex-1">
-          <bs-energy-composition />
-        </div>
-        <div class="flex-1">
-          <bs-coal-pollution />
-        </div>
+        <el-button @click="startDroneCruise">开启无人机巡检</el-button>
+        <el-button @click="pausedDroneCruise">暂停/继续</el-button>
+        <el-button @click="stopDroneCruise">停止无人机巡检</el-button>
+        <el-button @click="home">回到默认视角</el-button>
       </div>
       <div class="center flex-grow flex flex-col-reverse">
         <!-- <div class="center-bottom bg-gray-700"></div> -->
       </div>
-      <div class="right pointer-events-auto flex flex-col">
-        <div class="flex-1">
-          <bs-energy-consumption-percent />
-        </div>
-        <div class="flex-1">
-          <bs-energy-consumption-average-per-day />
-        </div>
-        <div class="flex-1">
-          <bs-energy-consumption-per-person />
-        </div>
-      </div>
+<!--      <div class="right pointer-events-auto flex flex-col">-->
+<!--      </div>-->
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, onMounted } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, onMounted, inject } from 'vue'
 import useLayoutControl from '../useLayoutControl'
 import { useStore } from '@/store'
 
@@ -56,6 +37,8 @@ import bsCoalPollution from './components/bs-coal-pollution.vue'
 import bsEnergyConsumptionPercent from './components/bs-energy-consumption-percent.vue'
 import bsEnergyConsumptionAveragePerDay from './components/bs-energy-consumption-average-per-day.vue'
 import bsEnergyConsumptionPerPerson from './components/bs-energy-consumption-per-person.vue'
+import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
+import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 
 export default defineComponent({
   name: 'carbon-neutral-bigscreen',
@@ -71,10 +54,30 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const layoutControl = useLayoutControl()
+    const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
+    const viewer = (cesiumRef || {}).viewer
 
     onMounted(() => {
       layoutControl.hideAllLayout(store)
     })
+    const startDroneCruise=()=>{
+      viewer?.jt?.droneCruise.start();
+    }
+    const stopDroneCruise = () => {
+      viewer?.jt?.droneCruise.stop();
+    }
+    const pausedDroneCruise = () => {
+      viewer?.jt?.droneCruise.pause();
+    }
+    const home = () => {
+      viewer?.jt?.flyTo.flyToHome()
+    }
+    return {
+      stopDroneCruise,
+      startDroneCruise,
+      pausedDroneCruise,
+      home
+    }
   },
 })
 </script>
@@ -87,7 +90,7 @@ export default defineComponent({
   .content {
     .left,
     .right {
-      width: 30%;
+      width: 20%;
       min-width: 260px;
       background-color: rgba(1, 6, 17, 0.9);
     }

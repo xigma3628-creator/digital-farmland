@@ -5,7 +5,7 @@ import {
   Math,
   Rectangle,
   Camera,
-  EasingFunction,
+  EasingFunction
 } from 'cesium'
 
 class FlyTo {
@@ -14,6 +14,7 @@ class FlyTo {
   constructor(viewer: Viewer) {
     this.viewer = viewer
   }
+
   flyTo(options: {
     destination: Cartesian3 | Rectangle
     orientation?: any
@@ -37,9 +38,9 @@ class FlyTo {
       orientation: {
         heading: Math.toRadians(0),
         pitch: Math.toRadians(-90),
-        roll: 0.0,
+        roll: 0.0
       },
-      duration: 1,
+      duration: 1
     })
   }
 
@@ -49,9 +50,25 @@ class FlyTo {
       orientation: {
         heading: Math.toRadians(0),
         pitch: Math.toRadians(-90),
-        roll: 0.0,
+        roll: 0.0
+      },
+      duration: 1
+    })
+  }
+
+  flyToHome(): void {
+    this.flyTo({
+      destination:new Cartesian3(-2353027.804312873, 5401212.113082644,2440218.556375086),
+      orientation: {
+        heading: 6.283185307179291,
+        pitch: -0.7853981348242258,
+        roll: 6.283185307179486
+
       },
       duration: 1,
+      complete:()=>{
+        console.log('回到首页')
+      }
     })
   }
 }

@@ -10,7 +10,7 @@
 import { defineComponent, inject, onMounted, onUnmounted } from 'vue'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import * as Cesium from 'cesium'
-import { Cartesian3, CustomDataSource } from 'cesium'
+import { Cartesian3, Cartographic, CustomDataSource } from 'cesium'
 import BorderWallMaterialProperty from '@/libs/cesium/layers/border-layer/borderWallMaterialProperty'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 
@@ -95,10 +95,22 @@ export default defineComponent({
         return
       }
       addGeoJson()
+      // if(viewr){
+      //   viewr.scene.preRender.addEventListener(()=>{
+      //     console.log('ca Cartographic',viewr.camera.position);
+      //     console.log('ca hpr',viewr.camera);
+      //
+      //   })
+      // }
     }
 
     onMounted(() => {
       init()
+      // window.requestAnimationFrame(()=>{
+      //   console.log('ca',viewr?.camera)
+      // })
+
+
     })
     onUnmounted(() => {
       if(timer){

@@ -1,6 +1,22 @@
-import { Cartesian3, JulianDate, Model, ModelAnimation, ModelAnimationLoop, Transforms, Viewer } from 'cesium'
+import {
+  BoundingSphere,
+  Cartesian3, Cartographic, Color, Entity, HeadingPitchRange,
+  JulianDate, Matrix3, Matrix4,
+  Model,
+  ModelAnimation,
+  ModelAnimationLoop, Quaternion,
+  SampledPositionProperty,
+  Transforms,
+  Viewer
+} from 'cesium'
 import * as Cesium from 'cesium'
+import CustomVelocityOrientationProperty from '@/libs/cesium/libs/drone-cruise/CustomVelocityOrientationProperty'
 
+enum DroneCruiseState{
+  'RUNNING' = 'RUNNING',
+  'STOPPING' = 'STOPPING',
+  'PASSED' = 'PASSED',
+}
 /**
  * 无人机巡航
  * **/
@@ -8,20 +24,38 @@ class DroneCruise {
   private viewer: Viewer
   private path: any
   private drone: Model | null
+  private pos: SampledPositionProperty;
+  private flyHeight: number;
+  private scale: number;
+  private orientationProp: CustomVelocityOrientationProperty;
+  private state:string=DroneCruiseState.STOPPING;
+  private speed: number = 100;
+  private pathUrl:string=''
+  private route:Entity;
+  // 成员变量定义
+  private lastCameraPosition:Cartesian3 |null=null;
 
-  constructor(viewer: Viewer) {
+  constructor(viewer: Viewer,options:{
+    speed?:number,
+    flyHeight?:number,
+    scale?:number,
+    pathUrl?:string
+  }) {
     this.viewer = viewer
     this.drone = null
-    this.initPath()
+    this.pos = new SampledPositionProperty();
+    this.flyHeight =options.flyHeight||10;
+    this.scale = options.scale||5;
+    this.pathUrl = options.pathUrl||'https://coderfmc.github.io/three.js-demo/入侵路径_ESPG_4326_WGS84.geojson';
+    this.initPath(this.pathUrl);
+    this.initDrone();
+    this.viewer.jt?.flyTo.flyToHome();
   }
-
-  loadDroneCruiseModel() {
-
-  }
-
-  private async initPath() {
+  private async initPath(
+    url:string
+  ) {
     if (this.path) return
-    const response = await fetch('https://coderfmc.github.io/three.js-demo/入侵路径_ESPG_4326_WGS84.geojson')
+    const response = await fetch(url)
     const geoJson = await response.json()
 
     const obj: any = {}
@@ -37,33 +71,23 @@ class DroneCruise {
       obj[key] = obj[key].sort((a: any, b: any) => a.properties.vertex_index - b.properties.vertex_index)
       pathList.push(obj[key])
     }
-    this.path = pathList[0]
-    this.initDrone(Cartesian3.fromDegrees(
-      this.path[0].geometry.coordinates[0],
-      this.path[0].geometry.coordinates[1],
-      100
-    ))
-    // this.initE(Cartesian3.fromDegrees(
-    //   this.path[0].geometry.coordinates[0],
-    //   this.path[0].geometry.coordinates[1],
-    //   100
-    // ))
+    this.path = pathList[0];
+    this.initPosSampledPositionProperty();
   }
 
-  private async initDrone(position: Cartesian3) {
+  private async initDrone() {
     if (this.drone) return;
 
     try {
       // 异步加载模型
       const model = await Model.fromGltfAsync({
         url: 'https://coderfmc.github.io/three.js-demo/drone.glb',
-        modelMatrix: Transforms.eastNorthUpToFixedFrame(position),
-        scale: 10
+        modelMatrix: Transforms.eastNorthUpToFixedFrame(new Cartesian3()),
+        scale: this.scale
       });
-
+      model.show=false;
       this.drone = model;
       this.viewer.scene.primitives.add(model);
-
       // 等待模型完全加载（通过轮询检查 model.ready）
       await this.waitForModelReady(model);
       // debugger
@@ -72,18 +96,7 @@ class DroneCruise {
         multiplier: 1.0,
         loop: ModelAnimationLoop.REPEAT
       });
-      // debugger
-
-      animations.forEach((animation: ModelAnimation) => {
-        // animation.play();
-        // animation.start.addEventListener(() => {
-        //   debugger
-        //   console.log(`Animation started: ${animation.name}`);
-        // });
-      });
-
     } catch (e) {
-      debugger
       console.error("Failed to load drone model:", e);
     }
   }
@@ -103,7 +116,177 @@ class DroneCruise {
   }
 
 
+  private initRoute(startTime:JulianDate,endTime:JulianDate){
+    this.route=this.viewer.entities.add({
+      position:this.pos,
+      show:true,
+      availability: new Cesium.TimeIntervalCollection([
+        new Cesium.TimeInterval({ start: startTime, stop: endTime})
+      ]),
+      path:{
+        material:Color.YELLOW,
+        leadTime:3600,
+        trailTime:3600,
+        resolution:1,
+        width:5
+      }
+    })
+  }
+
+
+  private initPosSampledPositionProperty() {
+    // 检查路径数据的完整性
+    this.path.forEach((feature: any, index: number) => {
+      if (!feature.geometry || !feature.geometry.coordinates || !feature.properties || !feature.properties.timestamp) {
+        console.error("Invalid feature:", feature);
+        return;
+      }
+      const coordinates = feature.geometry.coordinates;
+      const timestamp = feature.properties.timestamp;
+
+      // 添加位置样本
+      this.pos.addSample(
+        JulianDate.fromDate(new Date(timestamp)),
+        Cartesian3.fromDegrees(coordinates[0], coordinates[1], this.flyHeight)
+      );
+    });
+    this.orientationProp = new CustomVelocityOrientationProperty(this.pos, Cesium.Ellipsoid.WGS84, Math.PI);
+  }
+
+
+  private cameraTrack(currentPosition: Cesium.Cartesian3) {
+    if (!this.drone) return;
+    // const a=Cartographic.fromCartesian(currentPosition);
+    // const  b==C
+    if(!this.lastCameraPosition){
+      this.lastCameraPosition=currentPosition.clone();
+    }else{
+     const lastCartographic=Cartographic.fromCartesian(this.lastCameraPosition);
+     const curCartographic=Cartographic.fromCartesian(currentPosition);
+     const heading=this.bearing(
+       lastCartographic.latitude,
+       lastCartographic.longitude,
+       curCartographic.latitude,
+       curCartographic.longitude
+     )
+      this.lastCameraPosition=currentPosition.clone();
+      this.viewer.camera.lookAt(
+        currentPosition,
+        new HeadingPitchRange(heading, -20, 1000));
+    }
+
+
+    // 更新相机视角
+    this.viewer.camera.lookAt(currentPosition, new Cartesian3(0, -400, 400));
+
+  }
+
+  /**
+   * @name bearing 计算两点的角度 heading
+   * @param startLat 初始点的latitude
+   * @param startLng 初始点的longitude
+   * @param destLat 第二个点的latitude
+   * @param destLng 第二个点的latitude
+   * @return {number} heading值
+   */
+ private bearing(startLat:number, startLng:number, destLat:number, destLng:number) {
+    startLat = Cesium.Math.toRadians(startLat);
+    startLng = Cesium.Math.toRadians(startLng);
+    destLat = Cesium.Math.toRadians(destLat);
+    destLng = Cesium.Math.toRadians(destLng);
+    const y = Math.sin(destLng - startLng) * Math.cos(destLat);
+    const x = Math.cos(startLat) * Math.sin(destLat) - Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
+    const brng = Math.atan2(y, x);
+    const brngDgr = Cesium.Math.toDegrees(brng);
+    return (brngDgr + 360) % 360;
+  }
+
+  public stop(){
+    // console.log('重置前',this.viewer.camera.position)
+    // console.log('重置前',this.viewer.camera.direction)
+    this.state=DroneCruiseState.STOPPING;
+    this.viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+    this.viewer.scene.screenSpaceCameraController.enableRotate = true;
+    this.viewer.scene.screenSpaceCameraController.enableZoom = true;
+    this.viewer.jt?.flyTo.flyToHome();
+    const temp=this.viewer.clock.currentTime.clone();
+    this.viewer.clock.stopTime=temp;
+    this.viewer.entities.remove(this.route);
+    // console.log('重置后',this.viewer.camera.position)
+    // console.log('重置后',this.viewer.camera.direction)
+    // 重置参考系
+
+
+    if(this.drone){
+      this.drone.show=false;
+    }
+    this.viewer.jt?.layerManager.setLayerVisible('crop-layer',true)
+  }
+  public pause(){
+   if(this.state==DroneCruiseState.RUNNING){
+     this.state=DroneCruiseState.PASSED
+     this.viewer.clock.shouldAnimate=false;
+   }else if(this.state==DroneCruiseState.PASSED){
+     this.state=DroneCruiseState.RUNNING
+     this.viewer.clock.shouldAnimate=true;
+   }
+  }
+  public start() {
+    if (!this.drone || !this.path) return;
+    if(this.state!==DroneCruiseState.STOPPING)return;
+    // 检查路径数据的完整性
+    const scene = this.viewer.scene;
+    const drone = this.drone;
+    this.state=DroneCruiseState.RUNNING;
+
+    const startTime = JulianDate.fromDate(
+      new Date(
+        this.path[0].properties.timestamp
+      )
+    );
+    const endTime = JulianDate.fromDate(
+      new Date(
+        this.path[this.path.length - 1].properties.timestamp)
+    );
+    //显示无人机
+    this.drone.show=true;
+    // 巡航路径
+    this.initRoute(startTime,endTime);
+    // 隐藏作物识别图层
+    this.viewer.jt?.layerManager.setLayerVisible('crop-layer',false)
+
+    this.viewer.clock.startTime = startTime.clone();
+    this.viewer.clock.stopTime = endTime.clone();
+    this.viewer.clock.currentTime = startTime.clone();
+    this.viewer.clock.clockRange = Cesium.ClockRange.CLAMPED;
+    this.viewer.clock.shouldAnimate = true;
+    this.viewer.clock.multiplier = this.speed;
+
+
+    this.viewer.clock.onTick.addEventListener(() => {
+      if(this.state!==DroneCruiseState.RUNNING) return;
+      const currentTime = this.viewer.clock.currentTime;
+      // 获取当前时间和位置
+      const currentPosition = this.pos.getValue(currentTime);
+      const currentOrientation = this.orientationProp.getValue(currentTime);
+
+      if (Cesium.defined(currentPosition) && Cesium.defined(currentOrientation)) {
+        drone.modelMatrix = Cesium.Matrix4.fromTranslationQuaternionRotationScale(
+          currentPosition,
+          currentOrientation,
+          new Cesium.Cartesian3(this.scale, this.scale, this.scale) // 初始加载时的 scale 值
+        );
+        this.cameraTrack(currentPosition);
+      }
+    })
+    this.viewer.clock.onStop.addEventListener(()=>{
+      if(this.state!==DroneCruiseState.STOPPING){
+        this.stop();
+      }
+    })
+  }
+
+
 
 }
-
 export default DroneCruise
