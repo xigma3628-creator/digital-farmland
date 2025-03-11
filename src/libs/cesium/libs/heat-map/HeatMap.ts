@@ -54,7 +54,7 @@ export default class HeatMap {
     create3DHeatmap(this.viewer, {
       dataPoints: points,
       radius: 5,
-      baseElevation: 10,
+      baseElevation: 0,
       primitiveType: 'TRIANGLES',
       colorGradient: {
         '.3': 'blue',

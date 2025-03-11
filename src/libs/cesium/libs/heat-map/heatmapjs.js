@@ -798,6 +798,16 @@ function initializeHeatmap(heatmapState) {
             },
           },
         }),
+        renderState: {
+          depthTest: {
+            enabled: true,   // 开启深度检测
+            depthMask: false, // 关闭深度写入（解决遮挡问题）
+          },
+          // depthTest: {
+          //   enabled: false, // 关闭深度测试
+          // },
+          blending: Cesium.BlendingState.ALPHA_BLEND, // 启用透明混合
+        },
         vertexShaderSource: `
         in vec3 position3DHigh;
         in vec3 position3DLow;
@@ -820,13 +830,51 @@ function initializeHeatmap(heatmapState) {
             p += vec4(color.r *upDir * 100., 0.0);
             gl_Position = czm_modelViewProjectionRelativeToEye * p;
         }`,
+        fragmentShaderSource: `
+        in vec3 v_positionEC;
+        in vec3 v_normalEC;
+        in vec2 v_st;
+
+        void main()
+        {
+            vec3 positionToEyeEC = -v_positionEC;
+
+            vec3 normalEC = normalize(v_normalEC);
+        #ifdef FACE_FORWARD
+            normalEC = faceforward(normalEC, vec3(0.0, 0.0, 1.0), -normalEC);
+        #endif
+
+            czm_materialInput materialInput;
+            materialInput.normalEC = normalEC;
+            materialInput.positionToEyeEC = positionToEyeEC;
+            materialInput.st = v_st;
+            czm_material material = czm_getMaterial(materialInput);
+             if (material.alpha < 0.2) {
+                  discard;
+                }
+
+        #ifdef FLAT
+            out_FragColor = vec4(material.diffuse + material.emission, material.alpha);
+        #else
+            out_FragColor = czm_phong(normalize(positionToEyeEC), material, czm_lightDirectionEC);
+        #endif
+        }
+        `,
         translucent: true,
         flat: true,
       }),
       asynchronous: false,
     })
   );
+  console.log(heatmapState.heatmapPrimitive.appearance.fragmentShaderSource)
+  // heatmapState.heatmapPrimitive.show=false;
   heatmapState.heatmapPrimitive.id = "heatmap3d";
+  viewer.scene.primitives.lowerToBottom(heatmapState.heatmapPrimitive);
+  // viewer.scene.postRender.addEventListener(() => {
+  //   heatmapState.heatmapPrimitive.show = true;
+  //   viewer.scene.primitives.add( heatmapState.heatmapPrimitive);
+  //   viewer.scene.primitives.lowerToBottom( heatmapState.heatmapPrimitive); // 置于渲染队列底部
+  // });
 }
 
 export function  destroyHeatmap(heatmapState) {

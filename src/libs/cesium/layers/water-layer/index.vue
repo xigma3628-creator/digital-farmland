@@ -52,6 +52,7 @@ export default defineComponent({
           }
         })
 
+
         // 椭球面材质
         let appearance = new Cesium.EllipsoidSurfaceAppearance({
           material: material
