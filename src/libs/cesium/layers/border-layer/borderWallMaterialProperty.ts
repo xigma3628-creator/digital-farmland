@@ -39,10 +39,10 @@ export  default class BorderWallMaterialProperty {
     if(!Cesium.defined(result)) {
       result={};
     }
-    // debugger
+    //
     result.image=this.trailImage;
     result.color=this.color;
-    // debugger
+    //
     if(this.duration){
       result.time = (((new Date()).getTime() - this._time) % this.duration) / this.duration;
     }

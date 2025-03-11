@@ -37,7 +37,7 @@ class LayerManager {
     }else if(layer.collection instanceof Primitive){
       this.viewer.scene.primitives.add(layer.collection);
     }else if(layer.collection instanceof CustomDataSource){
-      // debugger
+      //
       this.viewer.dataSources.add(layer.collection);
     }
   };

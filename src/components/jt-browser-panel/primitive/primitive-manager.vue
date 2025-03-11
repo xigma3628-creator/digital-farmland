@@ -194,7 +194,7 @@ export default defineComponent({
 
     const init = (): void => {
       // ;(cesiumRef || {}).viewer?.jt?.primitiveManager.removeAll()
-      // debugger
+      //
       // if (route.query[UrlQuery.DemoMode]) {
       //   initDemoMode()
       // } else {

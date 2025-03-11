@@ -49,7 +49,7 @@ class DroneCruise {
     this.pathUrl = options.pathUrl||'https://coderfmc.github.io/three.js-demo/入侵路径_ESPG_4326_WGS84.geojson';
     this.initPath(this.pathUrl);
     this.initDrone();
-    this.viewer.jt?.flyTo.flyToHome();
+    // this.viewer.jt?.flyTo.flyToHome();
   }
   private async initPath(
     url:string
@@ -90,7 +90,7 @@ class DroneCruise {
       this.viewer.scene.primitives.add(model);
       // 等待模型完全加载（通过轮询检查 model.ready）
       await this.waitForModelReady(model);
-      // debugger
+      //
       // 添加并播放动画
       const animations = model.activeAnimations.addAll({
         multiplier: 1.0,

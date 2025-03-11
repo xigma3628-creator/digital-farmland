@@ -17,6 +17,7 @@ import type { Option } from '@/libs/cesium/libs/viewshed/Viewshed'
 import LayerManager from '@/libs/cesium/libs/layer-manager/LayerManager'
 import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
+import HeatMap from '@/libs/cesium/libs/heat-map/HeatMap'
 
 class Jt {
   protected viewer: Cesium.Viewer
@@ -158,6 +159,14 @@ class Jt {
       this._viewshed = new Viewshed(this.viewer)
     }
     return this._viewshed
+  }
+
+  private _heatMap?: HeatMap
+  public get heatMap(): HeatMap {
+    if (!this._heatMap) {
+      this._heatMap = new HeatMap(this.viewer)
+    }
+    return this._heatMap
   }
 }
 

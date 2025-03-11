@@ -66,8 +66,6 @@ export default defineComponent({
             material: material
           }
         })
-        const a=instance;
-        debugger
         viewr?.jt?.layerManager.registerLayer('border-layer', {
           show: true,
           collection: datasouce,
