@@ -216,7 +216,7 @@ export default defineComponent({
       initializeCesiumDefault()
       const viewer = initializeCesium()
       viewer.jt = new Jt(viewer)
-      const a= viewer.jt.heatMap
+      // const a= viewer.jt.heatMap
       viewer.jt.flyTo.flyToHome();
       // const droneCruise=viewer.jt.droneCruise;
       // new AddBoxEntities(viewer)

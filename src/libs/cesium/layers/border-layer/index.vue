@@ -19,7 +19,7 @@ export default defineComponent({
   setup(props, ctx) {
     const layerName: string = 'crop-layer'
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
-    const viewr = (cesiumRef || {}).viewer
+    const viewer = (cesiumRef || {}).viewer
     const datasouce: CustomDataSource = new CustomDataSource('wall')
     let material: any = null;
     let timer: any = null;
@@ -51,14 +51,21 @@ export default defineComponent({
 
 
     const addGeoJson = async () => {
-      if (!viewr) return
+      if (!viewer) return
       try {
         const response1 = await fetch('https://coderfmc.github.io/three.js-demo/边界_ESPG_4326_WGS84.geojson')
         const geoJson1 = await response1.json()
         const borderPos = geoJson1.features[0].geometry.coordinates[0]
-        material = new BorderWallMaterialProperty(viewr, {
+        material = new BorderWallMaterialProperty(viewer, {
           trailImage: '/static/imgs/wall.png', color: Cesium.Color.CYAN, duration: 1500
         })
+        const chinaCoords = [
+          73.55, 53.56, 0,   // 西北点
+          135.08, 53.56, 0,  // 东北点
+          135.08, 18.15, 0,  // 东南点
+          73.55, 18.15, 0,   // 西南点
+          73.55, 53.56, 0    // 闭合多边形
+        ];
         datasouce.entities.add({
           wall: {
             positions: Cartesian3.fromDegreesArray(borderPos.flat()),
@@ -66,7 +73,21 @@ export default defineComponent({
             material: material
           }
         })
-        viewr?.jt?.layerManager.registerLayer('border-layer', {
+        const texturedPolygonWithHoles = viewer.entities.add({
+          name: "Textured polygon with per-position heights, holes and custom texture coordinates",
+          polygon: {
+            hierarchy: {
+              positions: Cesium.Cartesian3.fromDegreesArrayHeights(chinaCoords),
+              holes: [
+                {
+                  positions:  Cartesian3.fromDegreesArray(borderPos.flat()),
+                },
+              ],
+            },
+            material: Cesium.Color.BLACK.withAlpha(0.8),
+          },
+        });
+        viewer?.jt?.layerManager.registerLayer('border-layer', {
           show: true,
           collection: datasouce,
           zIndex: 0,
@@ -77,7 +98,7 @@ export default defineComponent({
         /***
          入侵检测
          **/
-        // const intrusionDetection=new IntrusionDetection(viewr);
+        // const intrusionDetection=new IntrusionDetection(viewer);
         // intrusionDetection.isInsideCallback=function(){
         //   setIntrude(true)
         // }
@@ -93,14 +114,14 @@ export default defineComponent({
       }
     }
     const init = () => {
-      if (!viewr) {
+      if (!viewer) {
         return
       }
       addGeoJson()
-      // if(viewr){
-      //   viewr.scene.preRender.addEventListener(()=>{
-      //     console.log('ca Cartographic',viewr.camera.position);
-      //     console.log('ca hpr',viewr.camera);
+      // if(viewer){
+      //   viewer.scene.preRender.addEventListener(()=>{
+      //     console.log('ca Cartographic',viewer.camera.position);
+      //     console.log('ca hpr',viewer.camera);
       //
       //   })
       // }
@@ -109,7 +130,7 @@ export default defineComponent({
     onMounted(() => {
       init()
       // window.requestAnimationFrame(()=>{
-      //   console.log('ca',viewr?.camera)
+      //   console.log('ca',viewer?.camera)
       // })
 
 
@@ -118,7 +139,7 @@ export default defineComponent({
       if(timer){
         clearInterval(timer);
       }
-      // viewr?.scene.primitives.remove(collectio)
+      // viewer?.scene.primitives.remove(collectio)
     })
 
     return {

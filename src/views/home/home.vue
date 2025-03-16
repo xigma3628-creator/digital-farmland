@@ -37,10 +37,11 @@
         </overlay>
         <template v-if="cesiumLoaded">
           <border-layer></border-layer>
-          <crop-layer></crop-layer>
+<!--          <crop-layer></crop-layer>-->
           <house-greenery-layer></house-greenery-layer>
           <farmland-layer></farmland-layer>
           <water-layer></water-layer>
+          <equipment-layer></equipment-layer>
 <!--          <test3d-tiles-layer></test3d-tiles-layer>-->
         </template>
 
@@ -83,10 +84,12 @@ import CropLayer from '@/libs/cesium/layers/crop-layer/index.vue'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import BorderLayer from '@/libs/cesium/layers/border-layer/index.vue'
 import Bigscreen from '@/views/home/bigscreen/bigscreen.vue'
+import EquipmentLayer from '@/libs/cesium/layers/equipment-layer/index.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    EquipmentLayer,
     Bigscreen,
     BorderLayer,
     CropLayer,
