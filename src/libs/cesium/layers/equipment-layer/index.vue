@@ -11,17 +11,19 @@ import { defineComponent, getCurrentInstance, inject, onMounted, onUnmounted } f
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import * as Cesium from 'cesium'
 import {
-  BillboardCollection,
+  Billboard,
+  BillboardCollection, Cartesian2,
   Cartesian3,
   Cartographic,
   CustomDataSource,
   Matrix3,
   Matrix4,
-  Model,
+  Model, ScreenSpaceEventHandler,
   Transforms
 } from 'cesium'
 import BorderWallMaterialProperty from '@/libs/cesium/layers/border-layer/borderWallMaterialProperty'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
+import Tooltip from '@/libs/cesium/tooltip/tooltip'
 
 /**
  * 设备图层
@@ -29,7 +31,7 @@ import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/Intrusion
 export default defineComponent({
   name: 'equipment-layer',
   setup(props, ctx) {
-    const layerName: string = 'crop-layer'
+    const layerName: string = 'equipment-layer'
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const viewer = (cesiumRef || {}).viewer
     const datasouce: CustomDataSource = new CustomDataSource('wall')
@@ -38,7 +40,9 @@ export default defineComponent({
     const collection = new BillboardCollection({ scene: viewer.scene })
     const instance = getCurrentInstance();
     let height:number=0;
-
+    let monitors:any[]=[];
+    let monitorsIds:any[]=[];
+    let handler:any=null;
 
     const waitForModelReady=(model: Model): Promise<void>=>{
       return new Promise((resolve) => {
@@ -59,7 +63,6 @@ export default defineComponent({
     const loadMonitors = async (coordinates: number[][]) => {
       if (!viewer) return;
 
-    const monitors=[];
       for (let i = 0; i < coordinates.length; i++) {
         const pos = Cartesian3.fromDegrees(coordinates[i][0], coordinates[i][1], 0.5);
 
@@ -81,8 +84,10 @@ export default defineComponent({
           scale: 5,
           modelMatrix
         });
+        model.id='equipment-layer-monitor'+i;
 
         monitors[i]=viewer.scene.primitives.add(model);
+        monitorsIds[i]='equipment-layer-monitor'+i;
         if(i==0){
           await waitForModelReady(model);
           height=model.boundingSphere.radius;
@@ -91,7 +96,6 @@ export default defineComponent({
         }
         // monitors[i].show=false
       }
-      return monitors;
     };
     /**
      * 加载监视器图标
@@ -140,7 +144,56 @@ export default defineComponent({
       })
     };
 
+    /**
+     * 悬浮tooltip
+     * */
+    const cesiumEventHandler = () => {
+      if (!cesiumRef || !viewer) return
+      handler = new ScreenSpaceEventHandler(viewer.scene.canvas)
+      // const  divInnerHtml=`
+      // <div style="width: 32px;height: 32;"></div>
+      // `
+      const tooltip: Tooltip = new Tooltip(cesiumRef.viewerContainer)
+      const offset=new Cartesian2(-40,-40)
+      handler.setInputAction(function(movement: any) {
+        if (!viewer.jt?.layerManager.getLayer(layerName)?.show) return
+        const pickedObject = viewer.scene.pick(movement.endPosition)
+        if(Cesium.defined(pickedObject)
+          && pickedObject.primitive instanceof Model
+          &&monitorsIds.includes(pickedObject.primitive.id)
+        ){
+            const { properties } = pickedObject.id
+            const canvasPosition = movement.endPosition
+            tooltip.show(
+              canvasPosition,
+              `<p style="font-size: 14px;background: #fff;line-height: 18px;padding: 6px;border-radius: 4px;">双击查看详情</p>`,
+              offset
+            )
+            viewer.canvas.style.cursor = 'pointer'
+        }else{
+            viewer.canvas.style.cursor = 'default'
+            tooltip.hide()
+        }
+      }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
 
+
+      /**
+       * 双击查看详细数据
+       * **/
+      handler.setInputAction(function(movement: any) {
+        debugger
+        // if (!viewer.jt?.layerManager.getLayer(layerName)?.show) return
+        const pickedObject = viewer.scene.pick(movement.position)
+        if(Cesium.defined(pickedObject)
+          && pickedObject.primitive instanceof Model
+          &&monitorsIds.includes(pickedObject.primitive.id)
+        ){
+          console.log('双击了监测器')
+        }else{
+        }
+      }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
+
+    }
 
     const addGeoJson = async () => {
       if (!viewer) return
@@ -150,7 +203,17 @@ export default defineComponent({
         const coordinates= geoJson1.features.map((item:any)=>item.geometry.coordinates)
         await  loadMonitors(coordinates);
         await  loadBillboardCollection(coordinates);
-
+        viewer.jt?.layerManager.registerLayer(
+          layerName,
+          {
+            show: true,
+            zIndex:0,
+            collection:{
+              collection:collection,
+              monitors:monitors
+            }
+          }
+        )
 
       } catch (e) {
 
@@ -162,6 +225,7 @@ export default defineComponent({
         return
       }
       addGeoJson()
+      cesiumEventHandler();
     }
 
     onMounted(() => {
@@ -173,6 +237,12 @@ export default defineComponent({
 
     })
     onUnmounted(() => {
+      handler&&handler.destroy();
+      viewer?.scene.primitives.remove(collection)
+      monitors.forEach(item=>{
+        viewer?.scene.primitives.remove(item)
+      })
+
     })
   }
 })

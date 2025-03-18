@@ -18,6 +18,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Home',
     component: Home,
+    redirect:'/carbon-neutral-bigscreen',
     children: [
       {
         path: 'industry',

@@ -1,100 +1,46 @@
 <template>
-  <div class="relative w-full h-full">
-    <div ref="sampleChart" class="absolute bottom-0 left-0 right-0 top-0"></div>
+  <div class="bs-energy-consumption-per-person">
+    <div class="bs-energy-consumption-per-person-header">
+      <img src="/static/imgs/中心.png">
+      <div class="bs-energy-consumption-per-person-header-text">农田汇总5</div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, onMounted, shallowRef } from 'vue'
-import * as echarts from 'echarts'
+import { defineComponent, ref, reactive, computed, watch, onMounted } from 'vue'
 
 export default defineComponent({
   name: 'bs-energy-consumption-per-person',
-  setup(props, context) {
-    const sampleChart = shallowRef<HTMLElement | null>(null)
-    const chart = shallowRef<echarts.ECharts | undefined>(undefined)
-
-    const initChart = (): void => {
-      chart.value = echarts.init(sampleChart.value as HTMLElement)
-    }
-
-    const buildChart = () => {
-      if (!chart.value || chart.value?.isDisposed()) {
-        initChart()
-      }
-
-      chart.value?.clear()
-      const option = {
-        title: {
-          text: '常住人口人均能源消费量分析',
-          textStyle: {
-            color: '#fff',
-            fontSize: 14,
-          },
-          x: 'center',
-          t: 'top',
-        },
-        grid: {
-          top: '20%',
-          left: '1%',
-          right: '6%',
-          bottom: '3%',
-          containLabel: true,
-        },
-        legend: {
-          textStyle: {
-            color: 'rgb(255, 255, 255)',
-          },
-          top: 25,
-        },
-        xAxis: {
-          type: 'category',
-          data: ['能源总量', '煤炭', '原油', '电力'],
-        },
-        yAxis: [
-          {
-            type: 'value',
-            name: '',
-            min: 0,
-            max: 6000,
-            interval: 1000,
-          },
-        ],
-        series: [
-          {
-            name: '全国人均',
-            type: 'bar',
-            data: [3235, 2782, 424, 4676],
-            label: {
-              show: true,
-              position: 'top',
-            },
-          },
-          {
-            name: 'XX市',
-            type: 'bar',
-            data: [3279, 226, 378, 4915],
-            label: {
-              show: true,
-              position: 'top',
-            },
-          },
-        ],
-      }
-      chart.value?.setOption(option)
-    }
-
-    onMounted(() => {
-      initChart()
-      buildChart()
-    })
-
-    return {
-      sampleChart,
-      chart,
-      initChart,
-      buildChart,
-    }
-  },
 })
 </script>
+<style scoped lang="scss">
+.bs-energy-consumption-per-person{
+  width: 100%;
+  height: 100%;
+  ////background-image: url("/static/imgs/echarts/u5.svg");
+  //background-repeat: no-repeat;
+  //background-size: cover;
+  background-color: rgba(150, 150, 150, 0.1) !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #0d7a72;
+  color: #fff;
+  &-header{
+    height: 50px;
+    background-image: url("/static/imgs/echarts/u7.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    img{
+      width: 25px;
+      margin-right: 5px;
+    }
+    line-height: 50px;
+    font-size: 20px;
+  }
+}
+</style>

@@ -5,27 +5,53 @@
     <div
       class="header px-6 h-20 flex-grow-0 flex-shrink-0 pointer-events-auto flex flex-row items-center justify-between"
     >
-      <div class="title text-white font-bold text-2xl">智慧农田</div>
-      <nowDate class="text-white" />
-    </div>
-    <div class="content flex-grow flex flex-row">
-      <input type="checkbox" id="left-checkBox" class="hidden" />
-      <div class="left pointer-events-auto flex flex-col">
-        <h3 class="text-white">无人机巡航</h3>
-        <el-button @click="startDroneCruise">开启无人机巡检</el-button>
-        <el-button @click="pausedDroneCruise">暂停/继续</el-button>
-        <el-button @click="stopDroneCruise">停止无人机巡检</el-button>
-        <h3 class="text-white">入侵检测</h3>
-        <el-button @click="startIntrusionDetection">开始入侵检测</el-button>
-        <h3 class="text-white">默认视角</h3>
-        <el-button @click="home">回到默认视角</el-button>
+      <div class="left header-item">
+
       </div>
-      <div class="center flex-grow flex flex-col-reverse">
-        <!-- <div class="center-bottom bg-gray-700"></div> -->
+      <div class="title text-white font-bold text-2xl center header-item">智慧农田</div>
+      <div class="right header-item">
+        <nowDate />
       </div>
-<!--      <div class="right pointer-events-auto flex flex-col">-->
-<!--      </div>-->
     </div>
+        <div class="content flex-grow flex flex-row">
+<!--          <input type="checkbox" id="left-checkBox" class="hidden" />-->
+          <div class="left pointer-events-auto flex flex-col">
+<!--            <h3 class="text-white">无人机巡航</h3>-->
+<!--            <el-button @click="startDroneCruise">开启无人机巡检</el-button>-->
+<!--            <el-button @click="pausedDroneCruise">暂停/继续</el-button>-->
+<!--            <el-button @click="stopDroneCruise">停止无人机巡检</el-button>-->
+<!--            <h3 class="text-white">入侵检测</h3>-->
+<!--            <el-button @click="startIntrusionDetection">开始入侵检测</el-button>-->
+<!--            <h3 class="text-white">默认视角</h3>-->
+<!--            <el-button @click="home">回到默认视角</el-button>-->
+            <div class="left-one">
+              <bs-overview/>
+            </div>
+            <div class="left-tow">
+              <bs-coal-pollution/>
+            </div>
+            <div class="left-three">
+              <bs-energy-composition/>
+            </div>
+          </div>
+          <div class="center flex-grow flex flex-col-reverse">
+
+            <div class="center-bottom pointer-events-auto">
+
+            </div>
+          </div>
+          <div class="right pointer-events-auto flex flex-col">
+            <div class="right-one">
+              <bs-energy-consumption-average-per-day/>
+            </div>
+            <div class="right-tow">
+              <bs-energy-consumption-per-person/>
+            </div>
+            <div class="right-three">
+              <bs-energy-consumption-percent/>
+            </div>
+          </div>
+        </div>
   </div>
 </template>
 
@@ -54,7 +80,7 @@ export default defineComponent({
     bsCoalPollution,
     bsEnergyConsumptionPercent,
     bsEnergyConsumptionAveragePerDay,
-    bsEnergyConsumptionPerPerson,
+    bsEnergyConsumptionPerPerson
   },
   setup(props, context) {
     const store = useStore()
@@ -65,28 +91,28 @@ export default defineComponent({
     onMounted(() => {
       layoutControl.hideAllLayout(store)
     })
-    const startDroneCruise=()=>{
-      viewer?.jt?.droneCruise.start();
+    const startDroneCruise = () => {
+      viewer?.jt?.droneCruise.start()
     }
     const stopDroneCruise = () => {
-      viewer?.jt?.droneCruise.stop();
+      viewer?.jt?.droneCruise.stop()
     }
     const pausedDroneCruise = () => {
-      viewer?.jt?.droneCruise.pause();
+      viewer?.jt?.droneCruise.pause()
     }
-    const startIntrusionDetection= () => {
-      if(!viewer) return;
-      const borderlayer=viewer?.jt?.layerManager.getLayer('border-layer');
-      const intrusionDetection=new IntrusionDetection(viewer);
-      intrusionDetection.isInsideCallback=function(){
+    const startIntrusionDetection = () => {
+      if (!viewer) return
+      const borderlayer = viewer?.jt?.layerManager.getLayer('border-layer')
+      const intrusionDetection = new IntrusionDetection(viewer)
+      intrusionDetection.isInsideCallback = function() {
         borderlayer?.instance.ctx.setIntrude(true)
       }
-      intrusionDetection.noInsideCallback=function(){
+      intrusionDetection.noInsideCallback = function() {
         borderlayer?.instance.ctx.setIntrude(false)
       }
-      setTimeout(()=>{
-        intrusionDetection.startPersonTrack();
-      },2000)
+      setTimeout(() => {
+        intrusionDetection.startPersonTrack()
+      }, 2000)
     }
     const home = () => {
       viewer?.jt?.flyTo.flyToHome()
@@ -98,57 +124,70 @@ export default defineComponent({
       home,
       startIntrusionDetection
     }
-  },
+  }
 })
 </script>
 
 <style scoped lang="scss">
 .cnb {
   .header {
-    background-color: rgba(1, 6, 17, 0.7);
+    width: 100%;
+    height: 76px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('static/imgs/echarts/header.png');
+    display: flex;
+    justify-content: space-around;
+
+    &-item {
+      flex: 1;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+    }
+
+    .right {
+      height: 100%;
+    }
   }
+
   .content {
     .left,
     .right {
-      width: 20%;
-      min-width: 260px;
-      background-color: rgba(1, 6, 17, 0.9);
+      width: 360px;
+      //background: black;
+      display: flex;
+      flex-direction: column;
     }
-    #left-checkBox:checked + div {
-      background-color: green !important;
-      transform: translateX(calc(-1 * calc(100%) + 12px));
-      min-width: 0 !important;
+    .left{
+      margin-left: 10px;
     }
+    .right{
+      margin-right: 10px;
+    }
+
+
     .left {
       position: relative;
+    }
 
-      .handler {
-        // total width 12px
-        background-color: black;
-        position: absolute;
-        top: 49%;
-        right: 0;
-        padding: 3px;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        .dot {
-          width: 6px;
-          height: 6px;
-          display: inline-block;
-          border-radius: 3px;
-          background-color: red;
-          margin: 1px 0px;
-          cursor: inherit;
-        }
-      }
-    }
     .center {
+      position: relative;
       .center-bottom {
+        position: absolute;
+        background: black;
         width: 100%;
-        height: 168px;
+        height: 50px;
+        bottom: 0;
       }
     }
+  }
+  .left-one,.left-tow,.left-three,.right-one,.right-tow,.right-three{
+    height: 315px;
+    margin-bottom: 10px;
+    //background: black;
   }
 }
 </style>

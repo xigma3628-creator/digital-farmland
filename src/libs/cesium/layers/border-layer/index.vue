@@ -10,7 +10,7 @@
 import { defineComponent, getCurrentInstance, inject, onMounted, onUnmounted } from 'vue'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import * as Cesium from 'cesium'
-import { Cartesian3, Cartographic, CustomDataSource } from 'cesium'
+import { Cartesian2, Cartesian3, Cartographic, CustomDataSource, ImageMaterialProperty } from 'cesium'
 import BorderWallMaterialProperty from '@/libs/cesium/layers/border-layer/borderWallMaterialProperty'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 
@@ -84,7 +84,10 @@ export default defineComponent({
                 },
               ],
             },
-            material: Cesium.Color.BLACK.withAlpha(0.8),
+            material:  new ImageMaterialProperty({
+              image:'/static/imgs/echarts/u0_state0.jpg',
+              repeat:new Cartesian2(1000,1000)
+            }),
           },
         });
         viewer?.jt?.layerManager.registerLayer('border-layer', {
@@ -139,7 +142,7 @@ export default defineComponent({
       if(timer){
         clearInterval(timer);
       }
-      // viewer?.scene.primitives.remove(collectio)
+      viewer?.scene.primitives.remove(datasouce)
     })
 
     return {

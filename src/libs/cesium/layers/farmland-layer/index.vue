@@ -5,7 +5,7 @@
 <script lang="ts">
 
 
-import { computed, defineComponent, inject, onMounted } from 'vue'
+import { computed, defineComponent, inject, onMounted, onUnmounted } from 'vue'
 import { useStore } from '@/store'
 import { CesiumRef, CESIUM_REF_KEY } from '@/libs/cesium/cesium-vue'
 import {
@@ -17,6 +17,8 @@ import * as Cesium from 'cesium'
 export default defineComponent({
   name: 'farmland-layer',
   setup() {
+    let handler:any=null;
+    let getGeoJson:any=null;
     const store = useStore()
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const  getColor=(state:string,alpha:number):Cesium.Color=>{
@@ -47,16 +49,16 @@ export default defineComponent({
       return new Cesium.ColorMaterialProperty(colorProperty);
     }
     const addGeoJson = async (viewer: Cesium.Viewer) => {
-      const getGeoJson = viewer.dataSources.add(Cesium.GeoJsonDataSource.load('https://coderfmc.github.io/three.js-demo/农田_ESPG_4326_WGS84.geojson', {
+      getGeoJson = viewer.dataSources.add(Cesium.GeoJsonDataSource.load('https://coderfmc.github.io/three.js-demo/农田_ESPG_4326_WGS84.geojson', {
         stroke: Cesium.Color.HOTPINK.withAlpha(0),
         strokeWidth: 3,
         clampToGround: false, // 必须关闭贴地模式
         heightReference: Cesium.HeightReference.NONE // 明确高度参考系
       }));
-      getGeoJson.then(res => {
+      getGeoJson.then((res:any) => {
         // console.log('res', res)
         const entities = res.entities.values
-        entities.forEach((entity, index) => {
+        entities.forEach((entity:any) => {
           if (entity.polygon) {
             entity.polygon.material=createLandMaterial(entity)
             // 设置多边形基准高度
@@ -74,7 +76,7 @@ export default defineComponent({
 
     const  initEvent=(viewer: Cesium.Viewer)=>{
       const scene = viewer.scene;
-      const handler = viewer.screenSpaceEventHandler;
+      handler = viewer.screenSpaceEventHandler;
       handler.setInputAction(function (movement:any) {
         var pickedObject = scene.pick(movement.endPosition);
         if (Cesium.defined(pickedObject) && pickedObject.id instanceof Cesium.Entity) {
@@ -96,6 +98,9 @@ export default defineComponent({
     }
     onMounted(() => {
       init()
+    })
+    onUnmounted(() => {
+      handler&&handler.destroy();
     })
   }
 })

@@ -54,7 +54,7 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-image: url('static/imgs/original/h.png');
+    background-image: url('static/imgs/echarts/header.png');
     background-size: contain;
 
     .title {

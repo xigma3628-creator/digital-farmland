@@ -13,11 +13,11 @@ class Tooltip {
     this.container.appendChild(this.tooltip)
   }
 
-  show(position:Cartesian2,content:any) {
+  show(position:Cartesian2,content:any,offset:Cartesian2=new Cartesian2(0,20)) {
     this.tooltip.style.display = 'block';
     this.tooltip.style.position = 'absolute';
-    this.tooltip.style.left = `${position.x}px`
-    this.tooltip.style.top = `${position.y + 20}px` // 20px offset to position above the cursor
+    this.tooltip.style.left = `${position.x+offset.x}px`
+    this.tooltip.style.top = `${position.y + offset.y}px` // 20px offset to position above the cursor
     this.tooltip.innerHTML = content
   }
 

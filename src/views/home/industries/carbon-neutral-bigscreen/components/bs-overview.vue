@@ -1,36 +1,9 @@
 <template>
-  <div class="w-full h-full px-3 py-6 text-white grid grid-rows-4 grid-cols-2">
-    <div class="text-center h-7 col-span-2 font-bold text-xl">概览</div>
-    <div class="text-sm">
-      人口总数
-      <span class="text-yellow-700 font-bold text-xl">1609.4</span>
-      万人
-    </div>
-    <div class="">
-      清洁能源消耗
-      <span class="text-yellow-700 font-bold text-xl">6851.3</span>
-      万顿标准煤
-    </div>
-    <div class="">
-      地区生产总值
-      <span class="text-yellow-700 font-bold text-xl">25371.3</span>
-      亿元
-    </div>
-    <div class="">
-      绿化覆盖面积
-      <span class="text-yellow-700 font-bold text-xl">93324.5</span>
-      公顷
-    </div>
-    <div class="">
-      能源消耗总量
-      <span class="text-yellow-700 font-bold text-xl">9713.6</span>
-      万顿标准煤
-    </div>
-    <div class="">
-      森林面积
-      <span class="text-yellow-700 font-bold text-xl">923812.8</span>
-      公顷
-    </div>
+  <div class="bs-overview">
+      <div class="bs-overview-header">
+        <img src="/static/imgs/多功能.png">
+        <div class="bs-overview-header-text">农田汇总1</div>
+      </div>
   </div>
 </template>
 
@@ -41,3 +14,33 @@ export default defineComponent({
   name: 'bs-overview',
 })
 </script>
+<style scoped lang="scss">
+  .bs-overview{
+    width: 100%;
+    height: 100%;
+    ////background-image: url("/static/imgs/echarts/u5.svg");
+    //background-repeat: no-repeat;
+    //background-size: cover;
+    background-color: rgba(150, 150, 150, 0.1) !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #0d7a72;
+    color: #fff;
+    &-header{
+      height: 50px;
+      background-image: url("/static/imgs/echarts/u7.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      img{
+        width: 25px;
+        margin-right: 5px;
+      }
+      line-height: 50px;
+      font-size: 20px;
+    }
+  }
+</style>

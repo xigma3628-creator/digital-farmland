@@ -21,6 +21,7 @@ import Tooltip from '@/libs/cesium/tooltip/tooltip'
 export default defineComponent({
   name: 'crop-layer',
   setup(props, ctx) {
+    let handler:any=null;
     const layerName: string = 'crop-layer'
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const viewr = (cesiumRef || {}).viewer
@@ -136,6 +137,7 @@ export default defineComponent({
     })
     onUnmounted(() => {
       viewr?.scene.primitives.remove(collection)
+      handler&&handler.destroy();
     })
   }
 })
