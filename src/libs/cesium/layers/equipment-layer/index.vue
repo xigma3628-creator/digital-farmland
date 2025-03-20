@@ -24,6 +24,10 @@ import {
 import BorderWallMaterialProperty from '@/libs/cesium/layers/border-layer/borderWallMaterialProperty'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 import Tooltip from '@/libs/cesium/tooltip/tooltip'
+import { useStore } from '@/store'
+import { TemplateMutationTypes } from '@/store/modules/template/mutation-types'
+import { ModelParams } from '@/share/interface'
+import FarmlandMonitoringData from '@/domain/farmlandMonitoringData.domain'
 
 /**
  * 设备图层
@@ -31,6 +35,7 @@ import Tooltip from '@/libs/cesium/tooltip/tooltip'
 export default defineComponent({
   name: 'equipment-layer',
   setup(props, ctx) {
+    const store = useStore();
     const layerName: string = 'equipment-layer'
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const viewer = (cesiumRef || {}).viewer
@@ -181,13 +186,23 @@ export default defineComponent({
        * 双击查看详细数据
        * **/
       handler.setInputAction(function(movement: any) {
-        debugger
+        // debugger
         // if (!viewer.jt?.layerManager.getLayer(layerName)?.show) return
         const pickedObject = viewer.scene.pick(movement.position)
         if(Cesium.defined(pickedObject)
           && pickedObject.primitive instanceof Model
           &&monitorsIds.includes(pickedObject.primitive.id)
         ){
+          console.log('movement',movement)
+          const params:ModelParams={
+            show:true,
+            pos:movement.position,
+            data:new FarmlandMonitoringData({
+              ambientHumidity:20.1
+            })
+          }
+          store.commit(`template/${TemplateMutationTypes.SET_EQUIPMENT_DETAIL_MODEL}`,params)
+          // store.
           console.log('双击了监测器')
         }else{
         }

@@ -12,4 +12,7 @@ export const actions: ActionTree<State, RootState> = {
   async [TemplateActionTypes.SET_WEATHER]({ commit }) {
     commit(TemplateMutationTypes.SET_WEATHER)
   },
+  async [TemplateActionTypes.SET_EQUIPMENT_DETAIL_MODEL]({ commit }) {
+    commit(TemplateMutationTypes.SET_EQUIPMENT_DETAIL_MODEL)
+  }
 }

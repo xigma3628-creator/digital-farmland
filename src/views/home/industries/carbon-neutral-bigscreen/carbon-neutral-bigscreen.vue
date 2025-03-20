@@ -8,7 +8,7 @@
       <div class="left header-item">
 
       </div>
-      <div class="title text-white font-bold text-2xl center header-item">智慧农田</div>
+      <div class="title text-white font-bold text-2xl center header-item" @click="setModel()">智慧农田</div>
       <div class="right header-item">
         <nowDate />
       </div>
@@ -52,6 +52,8 @@
             </div>
           </div>
         </div>
+
+    <equipment-detail-model v-model:show="dialogVisible" :model-params="modelParams"></equipment-detail-model>
   </div>
 </template>
 
@@ -70,10 +72,14 @@ import bsEnergyConsumptionPerPerson from './components/bs-energy-consumption-per
 import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
 import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
+import EquipmentDetailModel
+  from '@/views/home/industries/carbon-neutral-bigscreen/components/equipment-detail-model.vue'
+import { ModelParams } from '@/share/interface'
 
 export default defineComponent({
   name: 'carbon-neutral-bigscreen',
   components: {
+    EquipmentDetailModel,
     nowDate,
     bsOverview,
     bsEnergyComposition,
@@ -87,6 +93,7 @@ export default defineComponent({
     const layoutControl = useLayoutControl()
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const viewer = (cesiumRef || {}).viewer
+    const dialogVisible =ref(false)
 
     onMounted(() => {
       layoutControl.hideAllLayout(store)
@@ -117,12 +124,24 @@ export default defineComponent({
     const home = () => {
       viewer?.jt?.flyTo.flyToHome()
     }
+    const  setModel=()=>{
+      dialogVisible.value =true
+    }
+    const modelParams=computed(() => {
+      if(store.state.template.equipmentDetailModelState.show){
+        dialogVisible.value =true;
+      }
+      return store.state.template.equipmentDetailModelState
+    })
     return {
       stopDroneCruise,
       startDroneCruise,
       pausedDroneCruise,
       home,
-      startIntrusionDetection
+      startIntrusionDetection,
+      setModel,
+      dialogVisible,
+      modelParams
     }
   }
 })
