@@ -11,6 +11,7 @@ import {
 } from 'cesium'
 import * as Cesium from 'cesium'
 import CustomVelocityOrientationProperty from '@/libs/cesium/libs/drone-cruise/CustomVelocityOrientationProperty'
+import { ElMessage } from 'element-plus'
 
 enum DroneCruiseState{
   'RUNNING' = 'RUNNING',
@@ -35,6 +36,11 @@ class DroneCruise {
   // 成员变量定义
   private lastCameraPosition:Cartesian3 |null=null;
 
+  private modelReady:boolean=false;
+  private pathReady:boolean=false;
+  private modelLoaing:boolean=false;
+  private pathLoading:boolean=false;
+
   constructor(viewer: Viewer,options:{
     speed?:number,
     flyHeight?:number,
@@ -47,8 +53,8 @@ class DroneCruise {
     this.flyHeight =options.flyHeight||10;
     this.scale = options.scale||5;
     this.pathUrl = options.pathUrl||'https://coderfmc.github.io/three.js-demo/入侵路径_ESPG_4326_WGS84.geojson';
-    this.initPath(this.pathUrl);
-    this.initDrone();
+    // this.initPath(this.pathUrl);
+    // this.initDrone();
     // this.viewer.jt?.flyTo.flyToHome();
   }
   private async initPath(
@@ -73,6 +79,7 @@ class DroneCruise {
     }
     this.path = pathList[0];
     this.initPosSampledPositionProperty();
+    this.pathReady=true;
   }
 
   private async initDrone() {
@@ -96,9 +103,19 @@ class DroneCruise {
         multiplier: 1.0,
         loop: ModelAnimationLoop.REPEAT
       });
+      this.modelReady=true;
     } catch (e) {
       console.error("Failed to load drone model:", e);
     }
+  }
+
+  public async init(){
+    this.modelLoaing=true;
+    this.pathLoading=true;
+    await this.initPath(this.pathUrl);
+    await this.initDrone();
+    this.modelLoaing=false;
+    this.pathLoading=false;
   }
 
   // 辅助函数：等待模型加载完成
@@ -229,8 +246,14 @@ class DroneCruise {
      this.viewer.clock.shouldAnimate=true;
    }
   }
-  public start() {
-    if (!this.drone || !this.path) return;
+  public async start() {
+   if(this.isLoading){
+     ElMessage.error('资源正在加载中...')
+     return;
+   }
+    if(!this.initFinished){
+      await this.init();
+    }
     if(this.state!==DroneCruiseState.STOPPING)return;
     // 检查路径数据的完整性
     const scene = this.viewer.scene;
@@ -284,6 +307,13 @@ class DroneCruise {
     })
   }
 
+
+  get initFinished(){
+   return this.modelReady&&this.pathReady
+  }
+  get isLoading(){
+   return this.modelLoaing||this.pathLoading
+  }
 
 
 }

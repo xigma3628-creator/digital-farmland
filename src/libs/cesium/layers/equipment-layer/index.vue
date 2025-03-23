@@ -129,17 +129,11 @@ export default defineComponent({
         const b = collection.get(i);
         baseZ[i]=b.position.z;
       }
+      const initialTime = Date.now(); // 记录初始时间
       viewer.scene.preRender.addEventListener((d:any,julianDate:any)=>{
-        // 转换为 JavaScript Date 对象
-        const date = Cesium.JulianDate.toDate(julianDate);
-        const elapsedSeconds = julianDate.secondsOfDay;
+        const currentTime = Date.now();
+        const elapsedSeconds = (currentTime - initialTime) / 1000; // 转换为秒
         const len = collection.length;
-        // 获取相机当前位置的笛卡尔坐标
-        // const cameraPosition = viewer.camera.position;
-        // const cartographic = Cesium.Cartographic.fromCartesian(cameraPosition);
-        // const height = cartographic.height;
-
-
         for (let i = 0; i < len; ++i) {
           const b = collection.get(i);
           const pos=b.position.clone();

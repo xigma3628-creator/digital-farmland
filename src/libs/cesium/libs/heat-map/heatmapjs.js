@@ -720,6 +720,7 @@ export  function create3DHeatmap(viewer, options = {}) {
     heatmapPrimitive: undefined,
     positionHierarchy: [],
     heatmapInstance: null,
+    show: true
   };
 
   if (!heatmapState.dataPoints || heatmapState.dataPoints.length < 2) {
@@ -885,6 +886,12 @@ export function  destroyHeatmap(heatmapState) {
   if (heatmapState.heatmapPrimitive) {
     heatmapState.viewer.scene.primitives.remove(heatmapState.heatmapPrimitive);
     heatmapState.heatmapPrimitive = undefined;
+  }
+}
+export function setVisible(heatmapState,show){
+  if (heatmapState.heatmapPrimitive) {
+    heatmapState.heatmapPrimitive.show=show;
+    heatmapState.show=show;
   }
 }
 

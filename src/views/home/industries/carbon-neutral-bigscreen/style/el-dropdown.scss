@@ -1,0 +1,66 @@
+/* 整体背景色和圆角 */
+.el-dropdown-menu {
+  background-color: #333 !important ;
+  border: 0 solid #0d7a72 !important ;
+  border-radius: 5px;
+}
+///* 下拉框定位 */
+//.el-popper {
+//  position: absolute !important ;
+//  top: 56px !important;
+//}
+//.el-popper[x-placement^=bottom]{
+//  margin-top: 10px;
+//  margin-bottom: 10px;
+//  padding: 0px;
+//}
+.el-dropdown-menu__item:not(:last-of-type){
+  border-bottom: 1px dashed #666;
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow{
+  border: none;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+  border: none;
+}
+/* 下拉选项样式与hover状态 */
+.user-dropdown {
+  li {
+    margin: 0;
+    padding: 0 8px;
+    width: 180px;
+    height: 32px;
+    color: #fff !important;
+    text-align: center;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  li:hover {
+    background-color: #333 !important ;
+    color: #17d3c2 !important;
+  }
+  .user-dropdown-item{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .user-dropdown-item.active{
+    color: #17d3c2 ;
+  }
+}
+.el-popper__arrow{
+  //display: none;
+}
+.el-popper.is-light, .el-popper.is-light>.el-popper__arrow:before {
+  background: #333 !important;
+  border: 1px solid #0d7a72 !important;
+}
+.el-popper.is-pure.is-light.el-dropdown__popper{
+border-color: #0d7a72;
+  border-width: 1px;
+  background-color: transparent;
+}

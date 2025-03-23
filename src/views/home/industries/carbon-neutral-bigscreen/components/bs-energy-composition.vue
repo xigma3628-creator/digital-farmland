@@ -22,7 +22,8 @@ export default defineComponent({
   ////background-image: url("/static/imgs/echarts/u5.svg");
   //background-repeat: no-repeat;
   //background-size: cover;
-  background-color: rgba(150, 150, 150, 0.1) !important;
+  //background-color: rgba(48, 48, 48, 0.75) !important;
+  background-color: #333;
   display: flex;
   flex-direction: column;
   overflow: hidden;

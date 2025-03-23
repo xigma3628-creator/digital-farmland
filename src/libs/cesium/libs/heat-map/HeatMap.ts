@@ -14,13 +14,13 @@ import { Cartesian3, Viewer } from 'cesium'
 // }
 
 
-import {create3DHeatmap} from '@/libs/cesium/libs/heat-map/heatmapjs'
+import {create3DHeatmap,setVisible} from '@/libs/cesium/libs/heat-map/heatmapjs'
 export default class HeatMap {
   private viewer: Viewer
-
+  private heatmapState:any=null;
   constructor(viewer: Viewer) {
     this.viewer = viewer;
-    this.init();
+    // this.init();
   }
   getData(){
 
@@ -51,7 +51,7 @@ export default class HeatMap {
     // })
 
 
-    create3DHeatmap(this.viewer, {
+   const {heatmapState,destroy}=(create3DHeatmap(this.viewer, {
       dataPoints: points,
       radius: 5,
       baseElevation: 0,
@@ -62,11 +62,33 @@ export default class HeatMap {
         '.7': 'yellow',
         '.95': 'red'
       }
-    })
+    }) as any)
+    this.heatmapState=heatmapState
     // this.viewer.camera.flyTo({
     //   destination: Cartesian3.fromDegrees(116.46, 39.92, 100000),
     //   orientation: {},
     //   duration: 3
-    // })
+    // }
+    return true;
+  }
+  public async setHeatMapVisible(visible:boolean){
+    return new Promise<boolean>((resolve, reject) => {
+      if(!this.heatmapState) {
+        resolve(false)
+      }else{
+        setVisible(this.heatmapState,visible);
+        resolve(true)
+      }
+    }).then(res=>{
+      if(res){
+        return res;
+      }else{
+        if(visible){
+          return this.init()
+        }else{
+          return false;
+        }
+      }
+    })
   }
 }

@@ -37,12 +37,12 @@
           <div class="center flex-grow flex flex-col-reverse">
 
             <div class="center-bottom pointer-events-auto">
-
+              <bottom-control @show-wrj-dialog-visible="setwrjModel($event)"></bottom-control>
             </div>
           </div>
           <div class="right pointer-events-auto flex flex-col">
             <div class="right-one">
-              <bs-energy-consumption-average-per-day/>
+<!--              <bs-energy-consumption-average-per-day/>-->
             </div>
             <div class="right-tow">
               <bs-energy-consumption-per-person/>
@@ -54,6 +54,7 @@
         </div>
 
     <equipment-detail-model v-model:show="dialogVisible" :model-params="modelParams"></equipment-detail-model>
+    <wrj-control-model v-model:show="wrjDialogVisible"></wrj-control-model>
   </div>
 </template>
 
@@ -75,10 +76,14 @@ import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/Intrusion
 import EquipmentDetailModel
   from '@/views/home/industries/carbon-neutral-bigscreen/components/equipment-detail-model.vue'
 import { ModelParams } from '@/share/interface'
+import BottomControl from '@/views/home/industries/carbon-neutral-bigscreen/components/bottom-control.vue'
+import WrjControlModel from '@/views/home/industries/carbon-neutral-bigscreen/components/wrj-control-model.vue'
 
 export default defineComponent({
   name: 'carbon-neutral-bigscreen',
   components: {
+    WrjControlModel,
+    BottomControl,
     EquipmentDetailModel,
     nowDate,
     bsOverview,
@@ -94,6 +99,7 @@ export default defineComponent({
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const viewer = (cesiumRef || {}).viewer
     const dialogVisible =ref(false)
+    const  wrjDialogVisible=ref(false)
 
     onMounted(() => {
       layoutControl.hideAllLayout(store)
@@ -127,6 +133,9 @@ export default defineComponent({
     const  setModel=()=>{
       dialogVisible.value =true
     }
+    const  setwrjModel=(show:boolean)=>{
+      wrjDialogVisible.value =true
+    }
     const modelParams=computed(() => {
       if(store.state.template.equipmentDetailModelState.show){
         dialogVisible.value =true;
@@ -140,6 +149,8 @@ export default defineComponent({
       home,
       startIntrusionDetection,
       setModel,
+      setwrjModel,
+      wrjDialogVisible,
       dialogVisible,
       modelParams
     }
@@ -195,11 +206,15 @@ export default defineComponent({
     .center {
       position: relative;
       .center-bottom {
-        position: absolute;
-        background: black;
-        width: 100%;
+        position: fixed;
+        width: 16%;
         height: 50px;
-        bottom: 0;
+        bottom: 1%;
+        left: 50%;
+        display: flex;
+        transform: translate(-50%);
+        background: black;
+        border-radius: 20px;
       }
     }
   }
