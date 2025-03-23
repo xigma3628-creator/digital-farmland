@@ -31,6 +31,11 @@ class FarmlandMonitoringData {
    */
   lightIntensity: number;
 
+  /**
+   * 监测设备名称
+   * */
+  equipmentName:string
+
 
   constructor(
     options: Partial<FarmlandMonitoringData> = {}
@@ -42,6 +47,7 @@ class FarmlandMonitoringData {
     this.ambientHumidity = options.ambientHumidity||0;
     this.monitorBattery = options.monitorBattery||0;
     this.lightIntensity = options.lightIntensity||0;
+    this.equipmentName=options.equipmentName||'';
   }
 }
 

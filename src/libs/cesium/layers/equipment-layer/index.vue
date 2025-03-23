@@ -198,7 +198,13 @@ export default defineComponent({
             show:true,
             pos:movement.position,
             data:new FarmlandMonitoringData({
-              ambientHumidity:20.1
+              soilTemperature: 22,
+              soilMoisture: 60,
+              soilPH: 6.5,
+              ambientTemperature: 25,
+              ambientHumidity: 70,
+              monitorBattery: 80,
+              lightIntensity: 50000
             })
           }
           store.commit(`template/${TemplateMutationTypes.SET_EQUIPMENT_DETAIL_MODEL}`,params)
