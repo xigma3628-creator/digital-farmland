@@ -28,11 +28,11 @@ class DroneCruise {
   private pos: SampledPositionProperty;
   private flyHeight: number;
   private scale: number;
-  private orientationProp: CustomVelocityOrientationProperty;
-  private state:string=DroneCruiseState.STOPPING;
+  private orientationProp!: CustomVelocityOrientationProperty;
+  public state:string=DroneCruiseState.STOPPING;
   private speed: number = 100;
   private pathUrl:string=''
-  private route:Entity;
+  private route!:Entity;
   // 成员变量定义
   private lastCameraPosition:Cartesian3 |null=null;
 
@@ -40,6 +40,8 @@ class DroneCruise {
   private pathReady:boolean=false;
   private modelLoaing:boolean=false;
   private pathLoading:boolean=false;
+  public handleEnd:any;
+  public handleStart:any;
 
   constructor(viewer: Viewer,options:{
     speed?:number,
@@ -53,6 +55,8 @@ class DroneCruise {
     this.flyHeight =options.flyHeight||10;
     this.scale = options.scale||5;
     this.pathUrl = options.pathUrl||'https://coderfmc.github.io/three.js-demo/入侵路径_ESPG_4326_WGS84.geojson';
+    this.handleEnd=null;
+    this.handleStart=null;
     // this.initPath(this.pathUrl);
     // this.initDrone();
     // this.viewer.jt?.flyTo.flyToHome();
@@ -231,11 +235,11 @@ class DroneCruise {
     // console.log('重置后',this.viewer.camera.direction)
     // 重置参考系
 
-
+    this.handleEnd&&this.handleEnd();
     if(this.drone){
       this.drone.show=false;
     }
-    this.viewer.jt?.layerManager.setLayerVisible('crop-layer',true)
+    // this.viewer.jt?.layerManager.setLayerVisible('crop-layer',true)
   }
   public pause(){
    if(this.state==DroneCruiseState.RUNNING){
@@ -246,7 +250,7 @@ class DroneCruise {
      this.viewer.clock.shouldAnimate=true;
    }
   }
-  public async start() {
+  public async start(handleStart:()=>void,handleStop:()=>void) {
    if(this.isLoading){
      ElMessage.error('资源正在加载中...')
      return;
@@ -256,9 +260,11 @@ class DroneCruise {
     }
     if(this.state!==DroneCruiseState.STOPPING)return;
     // 检查路径数据的完整性
-    const scene = this.viewer.scene;
     const drone = this.drone;
     this.state=DroneCruiseState.RUNNING;
+
+    !this.handleStart&&(this.handleStart=handleStart);
+    !this.handleEnd&&(this.handleEnd=handleStop);
 
     const startTime = JulianDate.fromDate(
       new Date(
@@ -269,6 +275,7 @@ class DroneCruise {
       new Date(
         this.path[this.path.length - 1].properties.timestamp)
     );
+    if(!this.drone) return;
     //显示无人机
     this.drone.show=true;
     // 巡航路径
@@ -283,7 +290,7 @@ class DroneCruise {
     this.viewer.clock.shouldAnimate = true;
     this.viewer.clock.multiplier = this.speed;
 
-
+    this.handleStart&&this.handleStart();
     this.viewer.clock.onTick.addEventListener(() => {
       if(this.state!==DroneCruiseState.RUNNING) return;
       const currentTime = this.viewer.clock.currentTime;
@@ -291,7 +298,7 @@ class DroneCruise {
       const currentPosition = this.pos.getValue(currentTime);
       const currentOrientation = this.orientationProp.getValue(currentTime);
 
-      if (Cesium.defined(currentPosition) && Cesium.defined(currentOrientation)) {
+      if (Cesium.defined(currentPosition) && Cesium.defined(currentOrientation)&&drone) {
         drone.modelMatrix = Cesium.Matrix4.fromTranslationQuaternionRotationScale(
           currentPosition,
           currentOrientation,

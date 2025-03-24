@@ -13,17 +13,8 @@
         <nowDate />
       </div>
     </div>
-        <div class="content flex-grow flex flex-row">
-<!--          <input type="checkbox" id="left-checkBox" class="hidden" />-->
+        <div v-if="!isFullScreen" class="content flex-grow flex flex-row">
           <div class="left pointer-events-auto flex flex-col">
-<!--            <h3 class="text-white">无人机巡航</h3>-->
-<!--            <el-button @click="startDroneCruise">开启无人机巡检</el-button>-->
-<!--            <el-button @click="pausedDroneCruise">暂停/继续</el-button>-->
-<!--            <el-button @click="stopDroneCruise">停止无人机巡检</el-button>-->
-<!--            <h3 class="text-white">入侵检测</h3>-->
-<!--            <el-button @click="startIntrusionDetection">开始入侵检测</el-button>-->
-<!--            <h3 class="text-white">默认视角</h3>-->
-<!--            <el-button @click="home">回到默认视角</el-button>-->
             <div class="left-one">
               <bs-overview/>
             </div>
@@ -54,7 +45,7 @@
         </div>
 
     <equipment-detail-model v-model:show="dialogVisible" :model-params="modelParams"></equipment-detail-model>
-    <wrj-control-model v-model:show="wrjDialogVisible"></wrj-control-model>
+    <wrj-control-model v-model:show="wrjDialogVisible" :set-show-chart="setFullScreen"></wrj-control-model>
   </div>
 </template>
 
@@ -100,6 +91,7 @@ export default defineComponent({
     const viewer = (cesiumRef || {}).viewer
     const dialogVisible =ref(false)
     const  wrjDialogVisible=ref(false)
+    const isFullScreen = ref(false)
 
     onMounted(() => {
       layoutControl.hideAllLayout(store)
@@ -142,6 +134,9 @@ export default defineComponent({
       }
       return store.state.template.equipmentDetailModelState
     })
+    const setFullScreen=(val:boolean)=>{
+      isFullScreen.value =val
+    }
     return {
       stopDroneCruise,
       startDroneCruise,
@@ -150,6 +145,8 @@ export default defineComponent({
       startIntrusionDetection,
       setModel,
       setwrjModel,
+      setFullScreen,
+      isFullScreen,
       wrjDialogVisible,
       dialogVisible,
       modelParams

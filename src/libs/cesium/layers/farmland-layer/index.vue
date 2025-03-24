@@ -55,9 +55,10 @@ export default defineComponent({
         clampToGround: false, // 必须关闭贴地模式
         heightReference: Cesium.HeightReference.NONE // 明确高度参考系
       }));
+      let entities:any[]=[];
       getGeoJson.then((res:any) => {
         // console.log('res', res)
-        const entities = res.entities.values
+        entities = res.entities.values
         entities.forEach((entity:any) => {
           if (entity.polygon) {
             entity.polygon.material=createLandMaterial(entity)
@@ -66,12 +67,21 @@ export default defineComponent({
 
             // 如果要创建立体效果可设置挤出高度
             entity.polygon.extrudedHeight = new Cesium.ConstantProperty(2.2)
-
-
           }
         })
         // viewer.zoomTo(entities)
       })
+      viewer.jt?.layerManager.registerLayer(
+        'farmland-layer',
+        {
+          show: true,
+          zIndex:0,
+          setShowCb:(isShow:boolean)=>{
+            entities.forEach(item=>item.show=isShow);
+          },
+          collection:getGeoJson
+        }
+      )
     }
 
     const  initEvent=(viewer: Cesium.Viewer)=>{

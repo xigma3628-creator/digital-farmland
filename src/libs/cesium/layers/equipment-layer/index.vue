@@ -223,6 +223,12 @@ export default defineComponent({
           {
             show: true,
             zIndex:0,
+            setShowCb:(isShow:boolean)=>{
+              collection.show=isShow;
+              monitors.forEach(item=>{
+                item.show=isShow;
+              })
+            },
             collection:{
               collection:collection,
               monitors:monitors

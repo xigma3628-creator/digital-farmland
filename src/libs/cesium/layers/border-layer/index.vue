@@ -66,7 +66,7 @@ export default defineComponent({
           73.55, 18.15, 0,   // 西南点
           73.55, 53.56, 0    // 闭合多边形
         ];
-        datasouce.entities.add({
+      const border=datasouce.entities.add({
           wall: {
             positions: Cartesian3.fromDegreesArray(borderPos.flat()),
             minimumHeights: new Array(borderPos.length).fill(20),
@@ -94,6 +94,10 @@ export default defineComponent({
           show: true,
           collection: datasouce,
           zIndex: 0,
+          setShowCb:(isShow:boolean) => {
+            texturedPolygonWithHoles.show=isShow;
+            border.show=isShow;
+          },
           instance:instance,
           ex:borderPos
         })

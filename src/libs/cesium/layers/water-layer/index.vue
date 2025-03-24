@@ -83,6 +83,9 @@ export default defineComponent({
         viewer.jt?.layerManager.registerLayer('water-layer',{
           show:true,
           zIndex:0,
+          setShowCb:(isShow:boolean)=>{
+            collection.show=isShow;
+          },
           collection
         })
         // viewer.scene.primitives.add(new Cesium.Primitive({

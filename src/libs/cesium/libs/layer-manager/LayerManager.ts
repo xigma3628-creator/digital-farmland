@@ -4,6 +4,7 @@ export interface LayerInterface{
   show:boolean,
   zIndex:number,
   collection:any,
+  setShowCb:(isShow:boolean)=>void,
   instance?:any,
   ex?:any
 }
@@ -28,6 +29,7 @@ class LayerManager {
     // if(id=='border-layer'){
     //   debugger
     // }
+    // debugger
     if(layer.collection instanceof EntityCollection){
       this.viewer.entities.add(layer.collection);
     }else if(layer.collection instanceof PrimitiveCollection){
@@ -48,10 +50,7 @@ class LayerManager {
   setLayerVisible(id: string, visible: boolean): void{
     if(this.layers.has(id)){
       const layer=this.layers.get(id);
-      if(layer){
-        layer.show = visible;
-        layer.collection.show = visible;
-      }
+      layer&&layer.setShowCb(visible);
     }
   };
 

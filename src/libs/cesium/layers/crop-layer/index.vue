@@ -82,6 +82,9 @@ export default defineComponent({
         viewer.jt?.layerManager.registerLayer('crop-layer', {
           show: true,
           zIndex: 0,
+          setShowCb:(isShow:boolean)=>{
+            collection.show=isShow;
+          },
           collection
         })
       } catch (e) {
