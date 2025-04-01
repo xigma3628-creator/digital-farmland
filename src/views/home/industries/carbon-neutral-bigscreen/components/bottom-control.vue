@@ -3,13 +3,14 @@
     <div class="bottom-control-item">
       <el-dropdown placement="top">
         <span class="bottom-control-item-text">
-          <img src="public/static/imgs/天气.png">
+          <img src="/static/imgs/天气.png">
           天气切换
         </span>
         <template #dropdown>
           <el-dropdown-menu class="user-dropdown ">
-            <el-dropdown-item>晴天</el-dropdown-item>
-            <el-dropdown-item>雨天</el-dropdown-item>
+            <el-dropdown-item @click="setWeather('晴天')">晴天</el-dropdown-item>
+            <el-dropdown-item @click="setWeather('雨天')">雨天</el-dropdown-item>
+            <el-dropdown-item @click="setWeather('下雪')">下雪</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -17,7 +18,7 @@
     <div class="bottom-control-item">
       <el-dropdown placement="top">
         <span class="bottom-control-item-text">
-          <img src="public/static/imgs/智能巡检.png">
+          <img src="/static/imgs/智能巡检.png">
           日常巡检
         </span>
         <template #dropdown>
@@ -56,6 +57,8 @@ import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 import { ElMessage } from 'element-plus'
 import WrjControlModel from '@/views/home/industries/carbon-neutral-bigscreen/components/wrj-control-model.vue'
+import { TemplateMutationTypes } from '@/store/modules/template/mutation-types'
+import { WeatherType } from '@/share/weather-type.enum'
 
 export default defineComponent({
   name: 'bottom-control',
@@ -151,6 +154,23 @@ export default defineComponent({
       rcxj.value='';
     }
 
+    const setWeather=(type:string)=>{
+      switch (type) {
+        case '晴天':
+          viewer?.jt?.weatherEffects.setPostProcessStage('晴天','sun')
+          store.commit(`template/${TemplateMutationTypes.SET_WEATHER}`,WeatherType.Sun)
+          break;
+        case '雨天':
+          viewer?.jt?.weatherEffects.setPostProcessStage('雨','rain')
+          store.commit(`template/${TemplateMutationTypes.SET_WEATHER}`,WeatherType.Rain)
+          break;
+        case '下雪':
+          viewer?.jt?.weatherEffects.setPostProcessStage('雪','snow')
+          store.commit(`template/${TemplateMutationTypes.SET_WEATHER}`,WeatherType.Snow)
+          break;
+      }
+    }
+
     return {
       home,
       startIntrusionDetection,
@@ -158,6 +178,7 @@ export default defineComponent({
       showWrjDialogVisible,
       wrjEnd,
       wrjDialogVisible,
+      setWeather,
       rcxj
       // setModel,
     }

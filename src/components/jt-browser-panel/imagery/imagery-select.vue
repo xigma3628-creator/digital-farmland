@@ -141,11 +141,11 @@ export default defineComponent({
     }
   },
   emits: {
-    [UPDATE_MODEL_EVENT](val: boolean) {
+    [UPDATE_MODEL_EVENT]:(val: boolean):boolean=>{
       return true
     },
 
-    [IMAGERY_SOURCE_SELECTED](imagerySource: ImagerySource) {
+    [IMAGERY_SOURCE_SELECTED]:(imagerySource: ImagerySource):boolean=> {
       return true
     },
   },

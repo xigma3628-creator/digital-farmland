@@ -49,20 +49,20 @@ export default class HeatMap {
     //     value: 1000 * Math.random()
     //   }
     // })
+const opt:any={
+  dataPoints: points,
+  radius: 5,
+  baseElevation: 0,
+  primitiveType: 'TRIANGLES',
+  colorGradient: {
+    '.3': 'blue',
+    '.5': 'green',
+    '.7': 'yellow',
+    '.95': 'red'
+  }
+}
 
-
-   const {heatmapState,destroy}=(create3DHeatmap(this.viewer, {
-      dataPoints: points,
-      radius: 5,
-      baseElevation: 0,
-      primitiveType: 'TRIANGLES',
-      colorGradient: {
-        '.3': 'blue',
-        '.5': 'green',
-        '.7': 'yellow',
-        '.95': 'red'
-      }
-    }) as any)
+   const {heatmapState,destroy}=(create3DHeatmap(this.viewer, opt) as any)
     this.heatmapState=heatmapState
     // this.viewer.camera.flyTo({
     //   destination: Cartesian3.fromDegrees(116.46, 39.92, 100000),

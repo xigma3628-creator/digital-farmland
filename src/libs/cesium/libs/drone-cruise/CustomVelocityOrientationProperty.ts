@@ -23,7 +23,7 @@ class CustomVelocityOrientationProperty implements Cesium.Property {
    * @readonly
    */
   get isConstant(): boolean {
-    return Cesium.Property.isConstant(this._velocityVectorProperty);
+    return (Cesium.Property as any).isConstant(this._velocityVectorProperty);
   }
 
   /**
@@ -37,7 +37,7 @@ class CustomVelocityOrientationProperty implements Cesium.Property {
   /**
    * Gets or sets the position property used to compute orientation.
    */
-  get position(): Cesium.Property {
+  get position(): any {
     return this._velocityVectorProperty.position;
   }
 
@@ -88,7 +88,7 @@ class CustomVelocityOrientationProperty implements Cesium.Property {
    */
   getValue(time: Cesium.JulianDate = Cesium.JulianDate.now(), result: Cesium.Quaternion = new Cesium.Quaternion()): Cesium.Quaternion | undefined {
     // 获取当前时间的速度向量
-    const velocity = this._velocityVectorProperty._getValue(time, CustomVelocityOrientationProperty.velocityScratch, CustomVelocityOrientationProperty.positionScratch);
+    const velocity = (this._velocityVectorProperty as any)._getValue(time, CustomVelocityOrientationProperty.velocityScratch, CustomVelocityOrientationProperty.positionScratch);
 
     if (!Cesium.defined(velocity)) {
       return undefined;
@@ -120,7 +120,7 @@ class CustomVelocityOrientationProperty implements Cesium.Property {
     return (
       this === other ||
       (other instanceof CustomVelocityOrientationProperty &&
-        Cesium.Property.equals(this._velocityVectorProperty, other._velocityVectorProperty) &&
+        (Cesium.Property as  any).equals(this._velocityVectorProperty, other._velocityVectorProperty) &&
         (this._ellipsoid === other._ellipsoid || this._ellipsoid.equals(other._ellipsoid)) &&
         this._modelOffsetAngle === other._modelOffsetAngle)
     );

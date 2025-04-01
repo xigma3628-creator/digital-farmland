@@ -34,10 +34,9 @@ export default defineComponent({
         offsetNorth: -21.6,
         offsetUp: 0
       }
-
       const c3Dtileset = await viewer.jt?.primitiveManager.add3DTileset({
         name: '广州南沙',
-        url: 'http://192.168.31.162:42225/distribution/model/72pwiz0g468z/tileset.json',
+        url: 'https://coderfmc.github.io/three.js-demo/guangzhounansha_bm/tileset.json',
         show: true,
         skipLevelOfDetail: true,
         skipScreenSpaceErrorFactor: 8,

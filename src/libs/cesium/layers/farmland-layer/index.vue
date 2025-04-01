@@ -37,7 +37,7 @@ export default defineComponent({
     const  createLandMaterial=(entity:Cesium.Entity)=>{
       const colorProperty=new Cesium.CallbackProperty(function(time,result){
         let alpha=0.5;
-        if(window.hightLightLandEntity===entity){
+        if((window as any).hightLightLandEntity===entity){
           alpha=1.0;
         }
         let state:string='';
@@ -49,12 +49,13 @@ export default defineComponent({
       return new Cesium.ColorMaterialProperty(colorProperty);
     }
     const addGeoJson = async (viewer: Cesium.Viewer) => {
-      getGeoJson = viewer.dataSources.add(Cesium.GeoJsonDataSource.load('https://coderfmc.github.io/three.js-demo/农田_ESPG_4326_WGS84.geojson', {
+      const landOpt:any={
         stroke: Cesium.Color.HOTPINK.withAlpha(0),
         strokeWidth: 3,
         clampToGround: false, // 必须关闭贴地模式
         heightReference: Cesium.HeightReference.NONE // 明确高度参考系
-      }));
+      }
+      getGeoJson = viewer.dataSources.add(Cesium.GeoJsonDataSource.load('https://coderfmc.github.io/three.js-demo/农田_ESPG_4326_WGS84.geojson', landOpt));
       let entities:any[]=[];
       getGeoJson.then((res:any) => {
         // console.log('res', res)
@@ -90,9 +91,9 @@ export default defineComponent({
       handler.setInputAction(function (movement:any) {
         var pickedObject = scene.pick(movement.endPosition);
         if (Cesium.defined(pickedObject) && pickedObject.id instanceof Cesium.Entity) {
-          window.hightLightLandEntity = pickedObject.id;
+          (window as any).hightLightLandEntity = pickedObject.id;
         } else {
-          window.hightLightLandEntity = null;
+          (window as any).hightLightLandEntity= null;
         }
 
       }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
@@ -102,7 +103,7 @@ export default defineComponent({
       if (!viewr) {
         return
       }
-      window.hightLightLandEntity=null;
+      (window as any).hightLightLandEntity=null;
       addGeoJson(viewr)
       initEvent(viewr);
     }

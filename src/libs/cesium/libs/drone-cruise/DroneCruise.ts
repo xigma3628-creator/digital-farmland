@@ -191,9 +191,9 @@ class DroneCruise {
        curCartographic.longitude
      )
       this.lastCameraPosition=currentPosition.clone();
-      this.viewer.camera.lookAt(
-        currentPosition,
-        new HeadingPitchRange(heading, -20, 1000));
+      // this.viewer.camera.lookAt(
+      //   currentPosition,
+      //   new HeadingPitchRange(heading, -20, 1000));
     }
 
 
@@ -226,6 +226,9 @@ class DroneCruise {
     // console.log('重置前',this.viewer.camera.position)
     // console.log('重置前',this.viewer.camera.direction)
     this.state=DroneCruiseState.STOPPING;
+    /**
+     * 解除相机锁定
+     * **/
     this.viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
     this.viewer.jt?.flyTo.flyToHome();
     const temp=this.viewer.clock.currentTime.clone();

@@ -1,3 +1,5 @@
+import EquipmentMonitor from '@/domain/equment-monitor.domian'
+
 /**
  * 农田监测数据
  */
@@ -34,7 +36,8 @@ class FarmlandMonitoringData {
   /**
    * 监测设备名称
    * */
-  equipmentName:string
+  equipmentName:string;
+  equipment: EquipmentMonitor;
 
 
   constructor(
@@ -48,6 +51,7 @@ class FarmlandMonitoringData {
     this.monitorBattery = options.monitorBattery||0;
     this.lightIntensity = options.lightIntensity||0;
     this.equipmentName=options.equipmentName||'';
+    this.equipment = options.equipment||new EquipmentMonitor();
   }
 }
 

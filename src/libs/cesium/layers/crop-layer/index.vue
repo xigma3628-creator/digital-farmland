@@ -25,7 +25,7 @@ export default defineComponent({
     const layerName: string = 'crop-layer'
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
     const viewr = (cesiumRef || {}).viewer
-    const collection = new BillboardCollection({ scene: viewr.scene })
+    const collection = new BillboardCollection({ scene: viewr?.scene })
     const addGeoJson = async (viewer: Cesium.Viewer) => {
       const height = 10.0
       try {

@@ -979,11 +979,11 @@ export default defineComponent({
   },
 
   emits: {
-    [RESIZING_EVNET](left: number, top: number, width: number, height: number) {
+    [RESIZING_EVNET]:(left: number, top: number, width: number, height: number):boolean=> {
       return true
     },
 
-    [DRAGGING_EVENT](left: number, top: number) {
+    [DRAGGING_EVENT]:(left: number, top: number):boolean=> {
       return true
     },
   },

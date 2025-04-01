@@ -28,6 +28,7 @@ import { useStore } from '@/store'
 import { TemplateMutationTypes } from '@/store/modules/template/mutation-types'
 import { ModelParams } from '@/share/interface'
 import FarmlandMonitoringData from '@/domain/farmlandMonitoringData.domain'
+import EquipmentMonitor from '@/domain/equment-monitor.domian'
 
 /**
  * 设备图层
@@ -42,7 +43,7 @@ export default defineComponent({
     const datasouce: CustomDataSource = new CustomDataSource('wall')
     let material: any = null;
     let timer: any = null;
-    const collection = new BillboardCollection({ scene: viewer.scene })
+    const collection = new BillboardCollection({ scene: viewer?.scene })
     const instance = getCurrentInstance();
     let height:number=0;
     let monitors:any[]=[];
@@ -130,19 +131,45 @@ export default defineComponent({
         baseZ[i]=b.position.z;
       }
       const initialTime = Date.now(); // 记录初始时间
-      viewer.scene.preRender.addEventListener((d:any,julianDate:any)=>{
-        const currentTime = Date.now();
-        const elapsedSeconds = (currentTime - initialTime) / 1000; // 转换为秒
-        const len = collection.length;
-        for (let i = 0; i < len; ++i) {
-          const b = collection.get(i);
-          const pos=b.position.clone();
-          pos.z=baseZ[i]+Math.sin(elapsedSeconds*4+(i%3))*0.8
-          b.position=pos;
-        }
-      })
+      // viewer.scene.preRender.addEventListener((d:any,julianDate:any)=>{
+      //   const currentTime = Date.now();
+      //   const elapsedSeconds = (currentTime - initialTime) / 1000; // 转换为秒
+      //   const len = collection.length;
+      //   for (let i = 0; i < len; ++i) {
+      //     const b = collection.get(i);
+      //     const pos=b.position.clone();
+      //     pos.z=baseZ[i]+Math.sin(elapsedSeconds*4+(i%3))*0.8
+      //     b.position=pos;
+      //   }
+      // })
     };
 
+    // const initList=(coordinates: number[][])=>{
+    //   const equipmentMonitorList:EquipmentMonitor[]=[];
+    //   for (let i = 0; i < coordinates.length; i++) {
+    //     const pos = Cartesian3.fromDegrees(coordinates[i][0], coordinates[i][1], 0.5);
+    //     equipmentMonitorList.push(new EquipmentMonitor({
+    //       id:(i+1)+'',
+    //       name:'设备'+(i+1),
+    //       state:'运行中',
+    //       pos:pos,
+    //     }))
+    //   }
+    //   if(!sessionStorage.getItem("equipmentMonitorList")){
+    //     sessionStorage.setItem("equipmentMonitorList", JSON.stringify(equipmentMonitorList));
+    //   }else{
+    //     sessionStorage.removeItem("equipmentMonitorList");
+    //     sessionStorage.setItem("equipmentMonitorList", JSON.stringify(equipmentMonitorList));
+    //   }
+    // }
+    const extractNumbers=(str: string): number[]=>{
+      const regex = /\d+/g;
+      const matches = str.match(regex);
+      if (matches) {
+        return matches.map((match) => parseInt(match, 10));
+      }
+      return [];
+    }
     /**
      * 悬浮tooltip
      * */
@@ -198,7 +225,11 @@ export default defineComponent({
               ambientTemperature: 25,
               ambientHumidity: 70,
               monitorBattery: 80,
-              lightIntensity: 50000
+              lightIntensity: 50000,
+              equipment:new EquipmentMonitor({
+                id:''+extractNumbers(pickedObject.primitive.id)[0],
+                name:'设备'+(extractNumbers(pickedObject.primitive.id)[0]+1)
+              })
             })
           }
           store.commit(`template/${TemplateMutationTypes.SET_EQUIPMENT_DETAIL_MODEL}`,params)
@@ -212,6 +243,7 @@ export default defineComponent({
 
     const addGeoJson = async () => {
       if (!viewer) return
+      const equipmentMonitorList:EquipmentMonitor[]=[];
       try {
         const response1 = await fetch('https://coderfmc.github.io/three.js-demo/监测器_ESPG_4326_WGS84.geojson')
         const geoJson1 = await response1.json();

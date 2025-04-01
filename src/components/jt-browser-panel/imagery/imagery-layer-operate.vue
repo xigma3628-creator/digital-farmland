@@ -14,7 +14,7 @@
         :min="0"
         :max="1"
         :step="0.05"
-        @change="(val) => afterChange('alpha', val)"
+        @change="(val:any) => afterChange('alpha', val)"
       />
     </div>
     <div class="my-0">
@@ -24,7 +24,7 @@
         :min="0"
         :max="6"
         :step="0.05"
-        @change="(val) => afterChange('brightness', val)"
+        @change="(val:any) => afterChange('brightness', val)"
       />
     </div>
     <div class="my-0">
@@ -34,7 +34,7 @@
         :min="0"
         :max="6"
         :step="0.05"
-        @change="(val) => afterChange('contrast', val)"
+        @change="(val:any) => afterChange('contrast', val)"
       />
     </div>
     <div class="my-0">
@@ -44,7 +44,7 @@
         :min="0"
         :max="12"
         :step="0.05"
-        @change="(val) => afterChange('hue', val)"
+        @change="(val:any) => afterChange('hue', val)"
       />
     </div>
     <div class="my-0">
@@ -54,7 +54,7 @@
         :min="0"
         :max="12"
         :step="0.05"
-        @change="(val) => afterChange('saturation', val)"
+        @change="(val:any) => afterChange('saturation', val)"
       />
     </div>
   </jt-main-area-dialog>
@@ -94,11 +94,11 @@ export default defineComponent({
     const visible = ref(props.modelValue)
     const title = ref(`影像配置-${props.imageryLayerName}`)
 
-    const afterChange = (key: string, val: Arrayable<number>): void => {
+    const afterChange = (key: string, val: any): void => {
       if (Array.isArray(val)) {
         return
       }
-      context.emit(PROPERTY_CHANGE_EVENT, key, val)
+      context.emit(PROPERTY_CHANGE_EVENT,key,val)
     }
 
     watch(
@@ -150,11 +150,13 @@ export default defineComponent({
     }
   },
   emits: {
-    [PROPERTY_CHANGE_EVENT](key: string, val: number) {
+    // [PROPERTY_CHANGE_EVENT](data:any) {
+    //   return true
+    // },
+    [PROPERTY_CHANGE_EVENT]: (key: string, val: number): boolean => {
       return true
     },
-
-    [UPDATE_MODEL_EVENT](val: boolean) {
+    [UPDATE_MODEL_EVENT]:(val: boolean):boolean=>{
       return true
     },
   },

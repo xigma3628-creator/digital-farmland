@@ -113,11 +113,11 @@ export default defineComponent({
     }
   },
   emits: {
-    [PROPERTY_CHANGE_EVENT](key: string, val: number) {
+    [PROPERTY_CHANGE_EVENT]:(key: string, val: number):boolean=> {
       return true
     },
 
-    [UPDATE_MODEL_EVENT](val: boolean) {
+    [UPDATE_MODEL_EVENT]:(val: boolean):boolean=> {
       return true
     },
   },

@@ -154,7 +154,7 @@ export default defineComponent({
       add3DTilesetDialog.url = ''
     }
 
-    const add3DTileset = (option: any): Cesium.Cesium3DTileset | undefined => {
+    const add3DTileset = (option: any):any => {
       const c3Dtileset = (cesiumRef || {}).viewer?.jt?.primitiveManager.add3DTileset(option)
 
       syncJTPrimitive()
@@ -213,14 +213,20 @@ export default defineComponent({
         url: 'https://tanghaojie.dynv6.net:60450/GisData/models/wenwu/BaiShuiSi_3dt/tileset.json',
         show: true,
       })
-      change3DTilesetHeight(w as Cesium.Cesium3DTileset, -422)
+      w.then(res=>{
+        change3DTilesetHeight(res as Cesium.Cesium3DTileset, -422)
+      })
+      // change3DTilesetHeight(w as Cesium.Cesium3DTileset, -422)
 
       const r = pm.add3DTileset({
         name: '清音溪摩崖造像',
         url: 'https://tanghaojie.dynv6.net:60450/GisData/models/wenwu/QingYinXiMoYaZaoXiang_3dt/tileset.json',
         show: true,
       })
-      change3DTilesetHeight(r as Cesium.Cesium3DTileset, -557)
+      r.then(res=>{
+        change3DTilesetHeight(res as Cesium.Cesium3DTileset, -557)
+      })
+      // change3DTilesetHeight(r as Cesium.Cesium3DTileset, -557)
 
       syncJTPrimitive()
     }

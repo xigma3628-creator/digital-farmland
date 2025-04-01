@@ -28,6 +28,8 @@ declare module '@vue/runtime-core' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSlider: typeof import('element-plus/es')['ElSlider']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ImageryLayerOperate: typeof import('./src/components/jt-browser-panel/imagery/imagery-layer-operate.vue')['default']
     ImageryManager: typeof import('./src/components/jt-browser-panel/imagery/imagery-manager.vue')['default']
     ImagerySelect: typeof import('./src/components/jt-browser-panel/imagery/imagery-select.vue')['default']

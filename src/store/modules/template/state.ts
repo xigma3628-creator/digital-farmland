@@ -8,7 +8,7 @@ export type State = {
 }
 export const defaultState = (): State => {
   return {
-    weather: WeatherType.Rain,
+    weather: WeatherType.Sun,
     equipmentDetailModelState:{
       pos:new Cartesian2(400,400),
       show:false,

@@ -73,17 +73,23 @@ export default defineComponent({
             material: material
           }
         })
+        const  hierarchyHoles:any=[
+          {
+            positions:  Cartesian3.fromDegreesArray(borderPos.flat()),
+          },
+        ]
+        const hierarchyPositions:any=Cesium.Cartesian3.fromDegreesArrayHeights(chinaCoords);
         const texturedPolygonWithHoles = viewer.entities.add({
           name: "Textured polygon with per-position heights, holes and custom texture coordinates",
           polygon: {
-            hierarchy: {
+            hierarchy: ({
               positions: Cesium.Cartesian3.fromDegreesArrayHeights(chinaCoords),
               holes: [
                 {
                   positions:  Cartesian3.fromDegreesArray(borderPos.flat()),
                 },
               ],
-            },
+            }) as any,
             material:  new ImageMaterialProperty({
               image:'/static/imgs/echarts/u0_state0.jpg',
               repeat:new Cartesian2(1000,1000)

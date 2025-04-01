@@ -10,6 +10,7 @@
   >
     <template #header="{ close, titleId, titleClass }">
       <div class="my-header">
+        <p>{{params.data.equipment.name}}</p>
         <el-icon class="close" @click="closeDialog"><Close /></el-icon>
       </div>
     </template>
@@ -75,6 +76,9 @@ export default defineComponent({
     const closeDialog = () => {
       dialogVisible.value = false;
     }
+    // onMounted(()=>{
+    //   console.log(params)
+    // })
 
     return {
       dialogVisible,
@@ -102,7 +106,7 @@ export default defineComponent({
       background-repeat: no-repeat;
       background-size: cover;
       display: flex;
-      justify-content: right;
+      justify-content: space-between;
       align-items: center;
       padding-left: 10px;
       color: #fff;

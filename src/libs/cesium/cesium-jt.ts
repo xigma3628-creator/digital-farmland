@@ -18,6 +18,7 @@ import LayerManager from '@/libs/cesium/libs/layer-manager/LayerManager'
 import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
 import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
 import HeatMap from '@/libs/cesium/libs/heat-map/HeatMap'
+import WeatherEffects from '@/libs/cesium/libs/weatherEffects/weatherEffects'
 
 class Jt {
   protected viewer: Cesium.Viewer
@@ -167,6 +168,15 @@ class Jt {
       this._heatMap = new HeatMap(this.viewer)
     }
     return this._heatMap
+  }
+
+
+  private _weatherEffects?: WeatherEffects
+  public get weatherEffects(): WeatherEffects {
+    if (!this._weatherEffects) {
+      this._weatherEffects = new WeatherEffects(this.viewer);
+    }
+    return this._weatherEffects;
   }
 }
 

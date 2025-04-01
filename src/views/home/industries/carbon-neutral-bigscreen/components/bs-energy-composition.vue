@@ -3,16 +3,103 @@ bs-energy-composition
   <div class="bs-energy-composition">
     <div class="bs-energy-composition-header">
       <img src="/static/imgs/图像.png">
-      <div class="bs-energy-composition-header-text">农田汇总3</div>
+      <div class="bs-energy-composition-header-text">近四年作物产量</div>
+    </div>
+    <div class="bs-energy-composition-main">
+      <div id="myEcharts2" :style="{ width: '100%', height: '100%' }"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, onMounted } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
+import * as echarts from 'echarts'
 
 export default defineComponent({
   name: 'bs-energy-composition',
+  setup(props, { emit }) {
+    let echart:any = echarts;
+    let  chart:any=null;
+    const initEcharts = () => {
+      const option =  {
+        backgroundColor:'transparent',
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // Use axis to trigger tooltip
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+          }
+        },
+        legend: {
+          textStyle:{
+            color:'white'
+          }
+        },
+        grid: {
+          left: '5%',
+          right: '5%',
+          bottom: '10',
+          top:'10%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category',
+          data: ['2021', '2022', '2023', '2024']
+        },
+        series: [
+          {
+            name: '香蕉',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [32.0, 30.2, 30.1, 33.4,]
+          },
+          {
+            name: '葡萄',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [12.0, 13.2, 10.1, 13.4,]
+          },
+          {
+            name: '猕猴桃',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [22.0, 18.2, 19.1, 23.4,]
+          },
+          {
+            name: '草莓',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [15.0, 21.2, 20.1, 15.4]
+          }
+        ]
+      };
+
+      chart = echart.init(document.getElementById("myEcharts2"), "dark");
+      chart.setOption(option)
+    }
+    onMounted(() => {
+      initEcharts();
+    });
+
+    onUnmounted(() => {
+      // echart&&echart.dispose();
+    });
+  }
 })
 </script>
 <style scoped lang="scss">
@@ -43,6 +130,10 @@ export default defineComponent({
     }
     line-height: 50px;
     font-size: 20px;
+  }
+  &-main{
+    flex: 1;
+    width: 100%;
   }
 }
 </style>
