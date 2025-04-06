@@ -1,53 +1,7 @@
-**English | [简体中文](#简介)**
-
-# Vue3 Cesium Typescipt Start up template
-
-# Introduction
-
-This is a project template for Vue3 + Cesium + Typescript apps with lots of sample datas. Preview:
-[https://vue3-cesium-typescript-start-up-template.vercel.app/](https://vue3-cesium-typescript-start-up-template.vercel.app/)
-
-## How to use
-
-_Note that you will need to have [Node.js](https://nodejs.org) installed._
-
-Fork or clone this repository. then:
-
-```bash
-pnpm install
-```
-
-### Compiles and hot-reloads for development
-
-```bash
-pnpm run vite
-```
-
-### Compiles and minifies for production
-
-```bash
-pnpm run build
-```
-
-## Dependencies
-
-- [Vue3](https://v3.vuejs.org/)
-- [cesium](https://cesium.com/)
-- [typescript](https://www.typescriptlang.org/)
-- option
-  - [Element plus](https://element-plus.org/) for convenient components
-  - [tailwindcss](https://tailwindcss.com/) for rapid UI development.
-  - [ECharts](https://echarts.apache.org/)
-
-
----
-
-**[English](#Introduction) | 简体中文**
-
 # 简介
 
-本项目是一个整合了 Vue3 + Cesium + Typescript 的启动模板，同时还包含了各种不同类型的示例数据。在线预览地址：
-[https://vue3-cesium-typescript-start-up-template.vercel.app/](https://vue3-cesium-typescript-start-up-template.vercel.app/)
+本项目是数字农田项目，这个项目是我检验自己cesium学习成功制作的练习项目。在线预览地址：
+[https://coderfmc.github.io/three.js-demo/digital-farmland/](https://vue3-cesium-typescript-start-up-template.vercel.app/)
 
 _可能需要跨过[墙]才能访问_
 
