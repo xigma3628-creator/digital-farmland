@@ -5,6 +5,9 @@ import ImageryLayerCoordinateTransform, {
 } from '@/libs/cesium/libs/imagery-layer-coordinate-transform/ImageryLayerCoordinateTransform'
 import uuid from '@/libs/utils/uuid'
 
+/***
+ 二维图层管理
+ */
 export type ImagerySource = {
   name: string
   iconImageUrl: string
@@ -56,8 +59,8 @@ class ImageryManager {
     const provider = new (Cesium as any)[item.providerName]({
       ...(item.options || {}),
     })
-    
-    
+
+
 
     // provider.readyPromise.then((success: boolean): void => {
     //   if (item.coordinateType) {
@@ -70,7 +73,7 @@ class ImageryManager {
 
     //   item.afterReady && item.afterReady(viewer, success)
     // })
-    
+
     const layer = new ImageryLayer(provider)
     layer.name = item.name
     layer.uuid = uuid()
@@ -95,6 +98,22 @@ class ImageryManager {
   public getLayer(index: number): ImageryLayer {
     this.syncImageries()
     return this.viewer.imageryLayers.get(this.imageries[index].cesiumLayerIndex)
+  }
+
+  /**
+   * 添加高德影像底图
+   * */
+  public addGdImagery(){
+    const { viewer } = this
+    viewer.imageryLayers.addImageryProvider(
+      new Cesium.UrlTemplateImageryProvider({
+        url: "https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+        subdomains: ["1", "2", "3", "4"], // 子域名轮询
+        tilingScheme: new Cesium.WebMercatorTilingScheme(), // 指定 Web 墨卡托投影
+        maximumLevel: 18, // 最大缩放级别
+        credit: "高德地图", // 版权信息（可选）
+      })
+    )
   }
 
   public removeLayer(index: number): void {

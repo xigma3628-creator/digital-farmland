@@ -86,7 +86,7 @@ export default defineComponent({
       scene.globe.dynamicAtmosphereLightingFromSun = false
     }
 
-    const lightTypeChange = (val: string | number | boolean): void => {
+    const lightTypeChange = (val:any): void => {
       lightTypes.forEach((lightType) => {
         if (lightType.name === val) {
           lightType.set && lightType.set()

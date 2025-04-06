@@ -14,11 +14,25 @@ import PrimitiveManager from '@/libs/cesium/libs/primitive-manager/PrimitiveMana
 import ClippingPlane from '@/libs/cesium/libs/clipping-plane/ClippingPlane'
 import Viewshed from '@/libs/cesium/libs/viewshed/Viewshed'
 import type { Option } from '@/libs/cesium/libs/viewshed/Viewshed'
+import LayerManager from '@/libs/cesium/libs/layer-manager/LayerManager'
+import DroneCruise from '@/libs/cesium/libs/drone-cruise/DroneCruise'
+import IntrusionDetection from '@/libs/cesium/libs/intrusion-detection/IntrusionDetection'
+import HeatMap from '@/libs/cesium/libs/heat-map/HeatMap'
+import WeatherEffects from '@/libs/cesium/libs/weatherEffects/weatherEffects'
+import { ResourceLoader } from '@/libs/cesium/libs/resource-loader/resource-loader'
 
 class Jt {
   protected viewer: Cesium.Viewer
+  public resourceLoader: ResourceLoader
+  public droneCruise: DroneCruise
   constructor(viewer: Cesium.Viewer) {
     this.viewer = viewer
+    this.resourceLoader=new ResourceLoader();
+    this.droneCruise=new DroneCruise(this.viewer,{});
+
+    //资源预加载注册
+    this.resourceLoader.add(this.droneCruise.initDrone.bind(this.droneCruise));
+
   }
 
   private _draw?: Draw
@@ -109,6 +123,30 @@ class Jt {
     return this._imageryManager
   }
 
+  private _layerManager?: LayerManager
+  public get layerManager(): LayerManager {
+    if (!this._layerManager) {
+      this._layerManager = new LayerManager(this.viewer)
+    }
+    return this._layerManager
+  }
+
+  // private _droneCruise?: DroneCruise
+  // public get droneCruise(): DroneCruise{
+  //   if (!this._droneCruise) {
+  //     this._droneCruise = new DroneCruise(this.viewer,{})
+  //   }
+  //   return this._droneCruise
+  // }
+
+  private _intrusionDetection?: IntrusionDetection
+  public get intrusionDetection(): IntrusionDetection{
+    if (!this._intrusionDetection) {
+      this._intrusionDetection = new IntrusionDetection(this.viewer)
+    }
+    return this._intrusionDetection;
+  }
+
   private _primitiveManager?: PrimitiveManager
   public get primitiveManager(): PrimitiveManager {
     if (!this._primitiveManager) {
@@ -132,6 +170,24 @@ class Jt {
     }
     return this._viewshed
   }
+
+  private _heatMap?: HeatMap
+  public get heatMap(): HeatMap {
+    if (!this._heatMap) {
+      this._heatMap = new HeatMap(this.viewer)
+    }
+    return this._heatMap
+  }
+
+
+  private _weatherEffects?: WeatherEffects
+  public get weatherEffects(): WeatherEffects {
+    if (!this._weatherEffects) {
+      this._weatherEffects = new WeatherEffects(this.viewer);
+    }
+    return this._weatherEffects;
+  }
+
 }
 
 export default Jt

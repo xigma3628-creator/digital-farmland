@@ -106,7 +106,7 @@ export default defineComponent({
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
 
     const selectChange = (val: string): void => {
-      const terrain = terrains.find((x) => x.name === val)
+      const terrain:any = terrains.find((x) => x.name === val)
       if (!terrain) {
         return
       }
@@ -117,11 +117,11 @@ export default defineComponent({
       if (terrain.terrainProvider) {
         ;(viewer.terrainProvider as any) = terrain.terrainProvider
       } else if (terrain.terrainProviderName) {
-        const provider: Cesium.TerrainProvider = new (Cesium as any)[terrain.terrainProviderName]({
+        const provider: any = new (Cesium as any)[terrain.terrainProviderName]({
           ...terrain.options,
         })
         if (terrain.afterReady) {
-          provider.readyPromise.then((success) => {
+          provider.readyPromise.then((success:any) => {
             terrain.afterReady(viewer, success)
           })
         }
@@ -135,7 +135,7 @@ export default defineComponent({
       if (!viewer) {
         return
       }
-      terrainSettingDialog.exaggeration = viewer.scene.globe.terrainExaggeration
+      terrainSettingDialog.exaggeration = (viewer.scene.globe as any).terrainExaggeration
       terrainSettingDialog.dialogVisible = true
     }
 
@@ -144,7 +144,7 @@ export default defineComponent({
       if (!viewer) {
         return
       }
-      viewer.scene.globe.terrainExaggeration = val
+      (viewer.scene.globe as any).terrainExaggeration = val
     }
 
     return {

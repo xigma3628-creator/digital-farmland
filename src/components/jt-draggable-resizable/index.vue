@@ -92,7 +92,7 @@ export default defineComponent({
     }
   },
   emits: {
-    [UPDATE_MODEL_EVENT](val: boolean) {
+    [UPDATE_MODEL_EVENT]:(val: boolean):boolean=> {
       return true
     },
   },

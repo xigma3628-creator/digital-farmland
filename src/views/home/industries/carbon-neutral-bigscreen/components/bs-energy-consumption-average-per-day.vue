@@ -1,146 +1,191 @@
 <template>
-  <div class="relative w-full h-full">
-    <div ref="sampleChart" class="absolute bottom-0 left-0 right-0 top-0"></div>
+  <div class="bs-energy-consumption-average-per-day">
+    <div class="bs-energy-consumption-average-per-day-header">
+      <img src="/static/imgs/控制台.png">
+      <div class="bs-energy-consumption-average-per-day-header-text">监测设备</div>
+    </div>
+    <div class="bs-energy-consumption-average-per-day-main">
+      <el-table
+        :data="mydata.list"
+        height="250"
+        style="width: 100%;--el-table-border-color: none;background-color: #333333"
+        :header-cell-style="{
+          'background-color': '#313744',
+            'color': '#fff',
+             borderBottom: ' 1px solid rgba(255, 255, 255, 0.2)',
+        }"
+        :cell-style="{
+          backgroundColor: '#333',
+          color: '#fff',
+          borderBottom: ' 1px solid rgba(255, 255, 255, 0.2)',
+          // borderRight: ' 1px solid rgba(255, 255, 255, 0.2)'
+        }"
+        ref="scrollTable"
+        @mouseenter.native="autoScroll(true)"
+        @mouseleave.native="autoScroll(false)"
+      >
+        <el-table-column fixed type="index" width="80" label="序号" />
+        <el-table-column prop="name" label="名称" />
+        <el-table-column prop="state" label="状态" />
+        <el-table-column label="操作">
+          <template #default="scope">
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click.prevent="goViewEquipmentMonitor(scope.row)"
+            >
+              查看详情
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, onMounted, shallowRef } from 'vue'
-import * as echarts from 'echarts'
+import { defineComponent, ref, reactive, onMounted, onUnmounted, nextTick, inject } from 'vue'
+import EquipmentMonitor from '@/domain/equment-monitor.domian'
+import { Cartesian3 } from 'cesium'
+import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
+import * as Cesium from 'cesium'
 
 export default defineComponent({
   name: 'bs-energy-consumption-average-per-day',
   setup(props, context) {
-    const sampleChart = shallowRef<HTMLElement | null>(null)
-    const chart = shallowRef<echarts.ECharts | undefined>(undefined)
+    const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
+    const viewer = (cesiumRef || {}).viewer
+    const mydata = reactive<{ list: EquipmentMonitor[] }>({ list: [] })
+    // 修改 scrollTimer 的类型
+    const scrollTimer = ref<ReturnType<typeof setInterval> | null>(null)
+    const scrollTable = ref<any>(null)
 
-    const initChart = (): void => {
-      chart.value = echarts.init(sampleChart.value as HTMLElement)
+    const getData = async () => {
+      const response1 = await fetch('https://coderfmc.github.io/three.js-demo/监测器_ESPG_4326_WGS84.geojson')
+      const geoJson1 = await response1.json()
+      const coordinates = geoJson1.features.map((item: any) => item.geometry.coordinates)
+      const equipmentMonitorList: EquipmentMonitor[] = []
+      for (let i = 0; i < coordinates.length; i++) {
+        const pos = Cartesian3.fromDegrees(coordinates[i][0], coordinates[i][1], 5)
+        equipmentMonitorList.push(new EquipmentMonitor({
+          id: (i) + '',
+          name: '设备' + (i + 1),
+          state: '运行中',
+          pos: pos
+        }))
+      }
+      mydata.list = equipmentMonitorList
+      // autoScroll(false)
+    }
+    const goViewEquipmentMonitor=(item:EquipmentMonitor)=>{
+      console.log('item',item);
+      viewer?.jt?.flyTo.flyTo({
+        destination:item.pos,
+        duration:1,
+        offset:{
+          heading: Cesium.Math.toRadians(-45),
+          pitch: Cesium.Math.toRadians(45),
+          range:50
+        }
+      })
     }
 
-    const buildChart = () => {
-      if (!chart.value || chart.value?.isDisposed()) {
-        initChart()
+    const autoScroll = (stop: boolean) => {
+      if (stop) {
+        if (scrollTimer.value) {
+          clearInterval(scrollTimer.value)
+          scrollTimer.value = null
+        }
+      } else {
+        if (!scrollTimer.value) {
+          scrollTimer.value = setInterval(() => {
+            const tableBody = scrollTable.value?.$el.querySelector('.el-scrollbar__wrap')
+            if (tableBody) {
+              tableBody.scrollTop = (tableBody.scrollTop + 2) % (tableBody.scrollHeight-tableBody.clientHeight)
+              // console.log('tableBody.scrollTop',tableBody.scrollTop)
+              // console.log('tableBody.scrollHeight',tableBody.scrollHeight)
+              // console.log('tableBody.scrollHeight',tableBody.clientHeight)
+            }
+          }, 50)
+        }
       }
-
-      chart.value?.clear()
-      const option = {
-        title: {
-          text: '主要能源日均消费量',
-          textStyle: {
-            color: '#fff',
-            fontSize: 14,
-          },
-          x: 'center',
-          t: 'top',
-        },
-        grid: {
-          top: '20%',
-          left: '1%',
-          right: '6%',
-          bottom: '3%',
-          containLabel: true,
-        },
-        legend: {
-          textStyle: {
-            color: 'rgb(255, 255, 255)',
-          },
-          data: ['原油', '汽油', '煤油', '柴油', '燃料油', '电力', '天然气'],
-          top: 25,
-        },
-        xAxis: {
-          type: 'category',
-          data: [
-            '2008年',
-            '2009年',
-            '2010年',
-            '2011年',
-            '2012年',
-            '2013年',
-            '2014年',
-            '2015年',
-            '2016年',
-            '2017年',
-            '2018年',
-            '2019年',
-            '2020年',
-            '2021年',
-          ],
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [
-          {
-            name: '原油',
-            type: 'line',
-            data: [
-              30000, 29020, 27000, 24000, 28000, 26000, 23000, 22000, 21000, 23000, 25000, 26000,
-              25000, 24000,
-            ],
-          },
-          {
-            name: '汽油',
-            type: 'line',
-            data: [
-              5000, 6000, 6000, 7000, 6000, 7000, 6000, 7000, 8000, 9000, 11000, 13000, 15000,
-              16000,
-            ],
-          },
-          {
-            name: '煤油',
-            type: 'line',
-            data: [
-              10000, 10500, 12000, 11500, 12000, 12500, 12800, 13500, 13500, 13600, 13900, 15000,
-              14000, 14200,
-            ],
-          },
-          {
-            name: '柴油',
-            type: 'line',
-            data: [
-              4000, 4000, 5000, 3000, 3000, 3000, 4000, 5000, 3000, 4000, 3000, 5000, 4000, 3000,
-            ],
-          },
-          {
-            name: '燃料油',
-            type: 'line',
-            data: [
-              2000, 3000, 4000, 4000, 5000, 6000, 6000, 5000, 6000, 5000, 6000, 7000, 8000, 8000,
-            ],
-          },
-          {
-            name: '电力',
-            type: 'line',
-            data: [
-              22000, 23000, 24000, 25000, 26000, 27000, 28000, 29000, 30000, 31000, 32000, 33000,
-              34000, 35000,
-            ],
-          },
-          {
-            name: '天然气',
-            type: 'line',
-            data: [
-              10000, 12000, 12500, 13000, 14000, 13500, 14500, 14000, 15000, 15500, 16000, 17000,
-              18000, 20000,
-            ],
-          },
-        ],
-      }
-      chart.value?.setOption(option)
     }
-
     onMounted(() => {
-      initChart()
-      buildChart()
+      getData()
+      autoScroll(false)
+      // setTimeout(()=>{
+      //   viewer?.scene.preRender.addEventListener(()=>{
+      //     console.log('相机')
+      //     console.log(viewer.scene.camera.heading);
+      //     console.log(viewer.scene.camera.pitch);
+      //     console.log(viewer.scene.camera.roll);
+      //     console.log(viewer.scene.camera.position)
+      //
+      //   })
+      // },1000)
+    })
+
+    onUnmounted(() => {
+      autoScroll(true)
     })
 
     return {
-      sampleChart,
-      chart,
-      initChart,
-      buildChart,
+      mydata,
+      autoScroll,
+      scrollTimer,
+      scrollTable,
+      goViewEquipmentMonitor
     }
-  },
+  }
 })
 </script>
+<style scoped lang="scss">
+.bs-energy-consumption-average-per-day {
+  width: 100%;
+  height: 100%;
+  ////background-image: url("/static/imgs/echarts/u5.svg");
+  //background-repeat: no-repeat;
+  //background-size: cover;
+  background-color: #333;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #0d7a72;
+  color: #fff;
+
+  &-header {
+    height: 50px;
+    background-image: url("/static/imgs/echarts/u7.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+
+    img {
+      width: 25px;
+      margin-right: 5px;
+    }
+
+    line-height: 50px;
+    font-size: 20px;
+  }
+
+  &-main {
+    flex: 1;
+    width: 100%;
+    //.equipment-table-header{
+    //  background-color: red !important;
+    //}
+  }
+
+  .equipment-table-header {
+    background-color: red !important;
+  }
+
+  ::v-deep .el-table tbody tr:hover > td {
+    background: #2d7c3b !important;
+  }
+}
+</style>

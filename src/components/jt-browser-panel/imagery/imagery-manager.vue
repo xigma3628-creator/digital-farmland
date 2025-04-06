@@ -141,7 +141,7 @@ export default defineComponent({
     }
 
     const addImagery = (item: ImagerySource): Cesium.ImageryLayer | undefined => {
-      
+
       const layer = (cesiumRef || {}).viewer?.jt?.imageryManager.addImagery(item)
       syncUIList()
       return layer
@@ -168,7 +168,7 @@ export default defineComponent({
     }
 
     const init = (): void => {
-      
+
       ; (cesiumRef || {}).viewer?.jt?.imageryManager.removeAll()
       const im = (cesiumRef || {}).viewer?.jt?.imageryManager
       if (!im) {
@@ -181,17 +181,17 @@ export default defineComponent({
       // const tiandituLabel = im.addImagery(
       //   (imagerySources[0] as ImagerySource[])[1]
       // )
-      const a = imagerySources;
-      
+      // const a = imagerySources;
+
 
 
       // 高德矢量
       // const amapLabel2 = im.addImagery((imagerySources[1] as ImagerySource[])[2])
       // 高德影像底图
-      const amapSatellite = im.addImagery((imagerySources[1] as ImagerySource[])[0])
+      // const amapSatellite = im.addImagery((imagerySources[1] as ImagerySource[])[0])
 
       // 高德影像注记
-      const amapLabel = im.addImagery((imagerySources[1] as ImagerySource[])[1])
+      // const amapLabel = im.addImagery((imagerySources[1] as ImagerySource[])[1])
 
 
 

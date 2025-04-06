@@ -106,7 +106,7 @@ export default defineComponent({
     }
   },
   emits: {
-    [SELECTCHANGE_EVENT](index: number) {
+    [SELECTCHANGE_EVENT]:(index: number):boolean=> {
       return true
     },
   },

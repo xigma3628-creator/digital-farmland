@@ -16,8 +16,14 @@ import {
   DistanceDisplayCondition,
   ColorBlendMode,
   Credit,
+  Cartographic,
+  Math
 } from 'cesium'
 import uuid from '@/libs/utils/uuid'
+
+/*
+三维图层管理
+* ***/
 
 export type JTPrimitive = {
   name: string
@@ -63,10 +69,10 @@ class PrimitiveManager {
     return this.jtPrimitives
   }
 
-  public add3DTileset(option: {
+  public async add3DTileset(option: {
     name: string
     // cesium default
-    url: Resource | string | Promise<Resource> | Promise<string>
+    url: string
     show?: boolean
     modelMatrix?: Matrix4
     shadows?: ShadowMode
@@ -100,7 +106,9 @@ class PrimitiveManager {
     pointCloudShading?: any
     imageBasedLightingFactor?: Cartesian2
     lightColor?: Cartesian3
-    luminanceAtZenith?: number
+    luminanceAtZenith?: number,
+    preloadAncestorsDepth?: number,
+    preloadSiblingsDepth?: number,
     sphericalHarmonicCoefficients?: Cartesian3[]
     specularEnvironmentMaps?: string
     backFaceCulling?: boolean
@@ -118,21 +126,39 @@ class PrimitiveManager {
     debugShowRenderingStatistics?: boolean
     debugShowMemoryUsage?: boolean
     debugShowUrl?: boolean
-  }): Cesium3DTileset {
-    const c3Dtileset = new Cesium3DTileset({
-      ...option,
-    })
-
+  }): Promise<Cesium3DTileset> {
+    // const c3Dtileset = new Cesium3DTileset({
+    //   ...option,
+    // })
+    const c3Dtileset = await Cesium3DTileset.fromUrl(option.url,{...option});
     c3Dtileset._PriManagFlag = PrimitiveManager.PRIMITIVE_MANAGER_FLAG_VALUE
     c3Dtileset.name = option.name
     c3Dtileset.uuid = uuid()
     c3Dtileset.show = option.show || false
 
     this.viewer.scene.primitives.add(c3Dtileset)
-    this.syncJTPrimitives()
-    if(c3Dtileset.name==='成都建筑群'){
-      debugger
+
+    // 获取模型的包围盒中心点
+    const boundingVolume = c3Dtileset.boundingSphere;
+    const center = Cartesian3.fromElements(
+      boundingVolume.center.x,
+      boundingVolume.center.y,
+      boundingVolume.center.z
+    );
+
+    // 将包围盒的中心点转换为经纬度
+    const cartographic = Cartographic.fromCartesian(center);
+    if(cartographic){
+      const longitude = Math.toDegrees(cartographic.longitude);
+      const latitude = Math.toDegrees(cartographic.latitude);
+      const altitude = cartographic.height;
+
+      console.log('模型原点经纬度:', longitude, latitude, altitude);
     }
+    this.syncJTPrimitives()
+    // if(c3Dtileset.name==='成都建筑群'){
+    //
+    // }
     return c3Dtileset
   }
 

@@ -1,150 +1,139 @@
+bs-energy-composition
 <template>
-  <div class="relative w-full h-full">
-    <div ref="sampleChart" class="absolute bottom-0 left-0 right-0 top-0"></div>
+  <div class="bs-energy-composition">
+    <div class="bs-energy-composition-header">
+      <img src="/static/imgs/图像.png">
+      <div class="bs-energy-composition-header-text">近四年作物产量</div>
+    </div>
+    <div class="bs-energy-composition-main">
+      <div id="myEcharts2" :style="{ width: '100%', height: '100%' }"></div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, onMounted, shallowRef } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 
 export default defineComponent({
   name: 'bs-energy-composition',
-  setup(props, context) {
-    const sampleChart = shallowRef<HTMLElement | null>(null)
-    const chart = shallowRef<echarts.ECharts | undefined>(undefined)
-
-    const initChart = (): void => {
-      chart.value = echarts.init(sampleChart.value as HTMLElement)
-    }
-
-    const buildChart = () => {
-      if (!chart.value || chart.value?.isDisposed()) {
-        initChart()
-      }
-
-      chart.value?.clear()
-      const option = {
-        title: {
-          text: '能源消费结构趋势',
-          textStyle: {
-            color: '#fff',
-            fontSize: 14,
-          },
-          x: 'center',
-          t: 'top',
-        },
+  setup(props, { emit }) {
+    let echart:any = echarts;
+    let  chart:any=null;
+    const initEcharts = () => {
+      const option =  {
+        backgroundColor:'transparent',
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985',
-            },
-          },
+            // Use axis to trigger tooltip
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+          }
         },
         legend: {
-          textStyle: {
-            color: 'rgb(255, 255, 255)',
-          },
-          data: ['煤炭', '石油', '天然气', '电力', '热力', '其他'],
-          top: '25',
+          textStyle:{
+            color:'white'
+          }
         },
         grid: {
-          left: '1%',
-          right: '6%',
-          bottom: '3%',
-          containLabel: true,
+          left: '5%',
+          right: '5%',
+          bottom: '10',
+          top:'10%',
+          containLabel: true
         },
-        xAxis: [
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: ['2006年', '2009年', '2012年', '2015年', '2018年', '2021年'],
-          },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-          },
-        ],
+        xAxis: {
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category',
+          data: ['2021', '2022', '2023', '2024']
+        },
         series: [
           {
-            name: '煤炭',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
+            name: '香蕉',
+            type: 'bar',
+            stack: 'total',
             emphasis: {
-              focus: 'series',
+              focus: 'series'
             },
-            data: [1200, 1900, 2400, 1800, 1100, 300],
+            data: [32.0, 30.2, 30.1, 33.4,]
           },
           {
-            name: '石油',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
+            name: '葡萄',
+            type: 'bar',
+            stack: 'total',
             emphasis: {
-              focus: 'series',
+              focus: 'series'
             },
-            data: [900, 1100, 1500, 1600, 1800, 2000],
+            data: [12.0, 13.2, 10.1, 13.4,]
           },
           {
-            name: '天然气',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
+            name: '猕猴桃',
+            type: 'bar',
+            stack: 'total',
             emphasis: {
-              focus: 'series',
+              focus: 'series'
             },
-            data: [200, 250, 375, 550, 780, 1200],
+            data: [22.0, 18.2, 19.1, 23.4,]
           },
           {
-            name: '电力',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
+            name: '草莓',
+            type: 'bar',
+            stack: 'total',
             emphasis: {
-              focus: 'series',
+              focus: 'series'
             },
-            data: [800, 1240, 1500, 2000, 2600, 3400],
-          },
-          {
-            name: '热力',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series',
-            },
-            data: [200, 250, 300, 350, 350, 350],
-          },
-          {
-            name: '其他',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series',
-            },
-            data: [200, 210, 250, 300, 400, 600],
-          },
-        ],
-      }
-      chart.value?.setOption(option)
-    }
+            data: [15.0, 21.2, 20.1, 15.4]
+          }
+        ]
+      };
 
+      chart = echart.init(document.getElementById("myEcharts2"), "dark");
+      chart.setOption(option)
+    }
     onMounted(() => {
-      initChart()
-      buildChart()
-    })
+      initEcharts();
+    });
 
-    return {
-      sampleChart,
-      chart,
-      initChart,
-      buildChart,
-    }
-  },
+    onUnmounted(() => {
+      // echart&&echart.dispose();
+    });
+  }
 })
 </script>
+<style scoped lang="scss">
+.bs-energy-composition{
+  width: 100%;
+  height: 100%;
+  ////background-image: url("/static/imgs/echarts/u5.svg");
+  //background-repeat: no-repeat;
+  //background-size: cover;
+  //background-color: rgba(48, 48, 48, 0.75) !important;
+  background-color: #333;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #0d7a72;
+  color: #fff;
+  &-header{
+    height: 50px;
+    background-image: url("/static/imgs/echarts/u7.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    img{
+      width: 25px;
+      margin-right: 5px;
+    }
+    line-height: 50px;
+    font-size: 20px;
+  }
+  &-main{
+    flex: 1;
+    width: 100%;
+  }
+}
+</style>

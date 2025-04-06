@@ -48,7 +48,7 @@ export default defineComponent({
       },
     ])
 
-    const sceneModeChange = (val: string | number | boolean): void => {
+    const sceneModeChange = (val: any): void => {
       sceneModeTypes.forEach((sceneMode) => {
         if (sceneMode.name === val) {
           changeSceneMode(viewer, sceneMode.mode, 0.5)
