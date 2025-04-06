@@ -39,72 +39,6 @@ pnpm run build
   - [tailwindcss](https://tailwindcss.com/) for rapid UI development.
   - [ECharts](https://echarts.apache.org/)
 
-## Features
- 
-- View
-- Status bar
-- Natural environment control
-- Earth setting
-- 3D tile operate
-- Draw
-- Measure
-- Sampling
-- Contour
-- Settings
-- Offset correct
-- more is coming ...
-
-## Guide
-
-### Cesium vue
-
-Cesium mounted on both global properties and `provide/inject` on main vue instance, for both composition or options API use.
-you can get cesium anywhere in vue instance:
-
-```typescript
-import { CesiumRef, CESIUM_REF_KEY} from '@/libs/cesium/cesium-vue'
-// global property
-const { viewer, viewerContainer } = this.$cesiumRef // type CesiumRef
-
-// provide/inject
-// Options API
-export default defineComponent({
-  inject: [CESIUM_REF_KEY],
-  mounted() {
-    console.log(this.cesiumRef)
-  },
-})
-// or Composition API
-setup() {
-  const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
-    onMounted(() => {
-      console.log(cesiumRef?.viewer)
-    })
-}
-```
-
-If you want other properties, you can add anything to `CesiumRef` _(src/@types/shims-cesium-ref.d.ts)_
-
-### Not React
-
-For better performance, `cesium instance` is not reactive! Different as vue data, Even Vue3 use `proxy` instead of `Object.defineProperty` got a lot of performance improvements. Cesium will lose too much FPS, if react cesium.
-
-## Sample Datas
-
-- [Tiled satellite data](https://sample-data-satellite.vercel.app/)
-- [Tiled terrain data](https://sample-data-terrain.vercel.app/)
-- [3D tile buildings](https://sample-data-jt.vercel.app/cd-buildings/3dtile)
-- [3D tile point cloud collected with ipad pro lidar](https://sample-data-jt.vercel.app/my-home/3dtile)
-
-**Datas above are the sample data I made after I obtained them through open channels or collected by myself. If use for test can be directly used, if you want to use for commercial purposes, please contact.**
-
-## Screenshots
-
-![](https://github.com/tanghaojie/vue3-cesium-typescript-start-up-template/blob/master/public/static/imgs/screenshot.png)
-![](https://github.com/tanghaojie/vue3-cesium-typescript-start-up-template/blob/master/public/static/imgs/screenshot2_compressed.png)
-![](https://github.com/tanghaojie/vue3-cesium-typescript-start-up-template/blob/master/public/static/imgs/screenshot3_compressed.png)
-
-_Note: do not use cesium versions from 1.81.0 to 1.82.1, it exists a [bug](https://github.com/CesiumGS/cesium/issues/9590)._
 
 ---
 
@@ -152,19 +86,13 @@ pnpm run build
 
 ## 功能列表
 
-- 视图切换
-- 状态栏
-- 环境控制
-- 地球控制
-- 3D tile 操作
-- 绘图
-- 测量
-- 地形采样
-- 等高线
-- 设置
-- 分屏
-- 偏移纠正
-- 持续加入中...
+- 天气模拟
+- 风险监控热力图
+- 无人机循环
+- 入侵检测
+- 白膜瓦片加载
+- echarts大屏
+...
 
 ## 指南
 
@@ -212,13 +140,7 @@ setup() {
 
 ## 示例数据
 
-- [Tiled satellite data](https://sample-data-satellite.vercel.app/)
-- [Tiled terrain data](https://sample-data-terrain.vercel.app/)
-- [3D tile buildings](https://sample-data-jt.vercel.app/cd-buildings/3dtile)
-- [3D tile point cloud collected with ipad pro lidar](https://sample-data-jt.vercel.app/my-home/3dtile)
+项目中的边界数据，白膜瓦片的等，我都放在了我的github资源仓库中：https://github.com/CoderFMC/three.js-demo/tree/main
 
 **以上数据都是本人通过公开渠道获取或者自己采集后，制作的示例数据。如果用于测试可以直接使用，如果用于商业用途请联系告知。谢谢。**
 
-_注意: 不要使用 1.81.0 - 1.82.1 版本的 cesium, 它包含一个已知的[bug](https://github.com/CesiumGS/cesium/issues/9590)._
-
----
