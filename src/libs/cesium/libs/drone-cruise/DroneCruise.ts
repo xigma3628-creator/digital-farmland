@@ -86,7 +86,7 @@ class DroneCruise {
     this.pathReady=true;
   }
 
-  private async initDrone() {
+  public async initDrone() {
     if (this.drone) return;
 
     try {
@@ -97,7 +97,9 @@ class DroneCruise {
         scale: this.scale
       });
       model.show=false;
+
       this.drone = model;
+
       this.viewer.scene.primitives.add(model);
       // 等待模型完全加载（通过轮询检查 model.ready）
       await this.waitForModelReady(model);
@@ -108,8 +110,10 @@ class DroneCruise {
         loop: ModelAnimationLoop.REPEAT
       });
       this.modelReady=true;
+      return true
     } catch (e) {
       console.error("Failed to load drone model:", e);
+      return false;
     }
   }
 
@@ -254,13 +258,14 @@ class DroneCruise {
    }
   }
   public async start(handleStart:()=>void,handleStop:()=>void) {
-   if(this.isLoading){
-     ElMessage.error('资源正在加载中...')
-     return;
-   }
+   // if(this.isLoading){
+   //   ElMessage.error('资源正在加载中...')
+   //   return;
+   // }
     if(!this.initFinished){
       await this.init();
     }
+
     if(this.state!==DroneCruiseState.STOPPING)return;
     // 检查路径数据的完整性
     const drone = this.drone;

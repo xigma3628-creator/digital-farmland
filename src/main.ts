@@ -17,6 +17,13 @@ const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+
+// const  currentEnv=import.meta.env.VITE_APP_ENV;
+// if(currentEnv==='production'){
+//   window.DIGITALFARMLANDURL=''
+// }
+(window as any).resourceBaseUrl='https://coderfmc.github.io/three.js-demo/digital-farmland'
+
 app.use(store, key).use(router).use(cesiumVue).use(i18n)
 
 register(app)

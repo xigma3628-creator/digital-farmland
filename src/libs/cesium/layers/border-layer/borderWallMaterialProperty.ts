@@ -66,7 +66,7 @@ export  default class BorderWallMaterialProperty {
   ) {
     let value:any;
     if (Cesium.defined(property)) {
-      debugger
+
       value = property.getValue(time, result);
     }
     if (!Cesium.defined(value)) {

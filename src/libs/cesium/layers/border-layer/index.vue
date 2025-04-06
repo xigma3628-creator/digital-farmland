@@ -23,10 +23,14 @@ export default defineComponent({
     const datasouce: CustomDataSource = new CustomDataSource('wall')
     let material: any = null;
     let timer: any = null;
-    const instance = getCurrentInstance()
+    // const instance {} = getCurrentInstance()
+
+    // let {proxy:any} = getCurrentInstance();
+    const proxy:any=getCurrentInstance()?.proxy;
 
 
-    /**
+
+      /**
      * 入侵检测
      * */
     const setIntrude = (val: boolean) => {
@@ -57,7 +61,7 @@ export default defineComponent({
         const geoJson1 = await response1.json()
         const borderPos = geoJson1.features[0].geometry.coordinates[0]
         material = new BorderWallMaterialProperty(viewer, {
-          trailImage: '/static/imgs/wall.png', color: Cesium.Color.CYAN, duration: 1500
+          trailImage: (window as any).resourceBaseUrl+'/static/imgs/wall.png', color: Cesium.Color.CYAN, duration: 1500
         })
         const chinaCoords = [
           73.55, 53.56, 0,   // 西北点
@@ -91,7 +95,7 @@ export default defineComponent({
               ],
             }) as any,
             material:  new ImageMaterialProperty({
-              image:'/static/imgs/echarts/u0_state0.jpg',
+              image:(window as any).resourceBaseUrl+'/static/imgs/echarts/u0_state0.jpg',
               repeat:new Cartesian2(1000,1000)
             }),
           },
@@ -104,7 +108,7 @@ export default defineComponent({
             texturedPolygonWithHoles.show=isShow;
             border.show=isShow;
           },
-          instance:instance,
+          instance:proxy,
           ex:borderPos
         })
 

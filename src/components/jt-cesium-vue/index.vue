@@ -217,6 +217,7 @@ export default defineComponent({
       const viewer = initializeCesium()
       viewer.jt = new Jt(viewer)
       viewer.jt.flyTo.flyToHome();
+
       // const droneCruise=viewer.jt.droneCruise;
       // new AddBoxEntities(viewer)
       return viewer
@@ -225,7 +226,14 @@ export default defineComponent({
     onMounted(() => {
       const viewer = init()
       viewer.jt?.imageryManager.addGdImagery();
-      context.emit(LOADED_EVENT, { viewer })
+
+      if(viewer){
+        //资源加载完毕
+        viewer.jt?.resourceLoader.loadResource().then(res=>{
+
+          context.emit(LOADED_EVENT, { viewer })
+        }).catch(e=>{})
+      }
     })
 
     onUnmounted(() => {

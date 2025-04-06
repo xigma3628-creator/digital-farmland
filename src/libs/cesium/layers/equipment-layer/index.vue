@@ -114,7 +114,7 @@ export default defineComponent({
         const pos = Cartesian3.fromDegrees(coordinates[i][0], coordinates[i][1], 12);
         collection.add({
           position: pos,
-          image: '/static/imgs/土壤监测设备.png',
+          image: (window as any).resourceBaseUrl+'/static/imgs/土壤监测设备.png',
           width: 32,
           height: 32,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -207,7 +207,7 @@ export default defineComponent({
        * 双击查看详细数据
        * **/
       handler.setInputAction(function(movement: any) {
-        // debugger
+        //
         // if (!viewer.jt?.layerManager.getLayer(layerName)?.show) return
         const pickedObject = viewer.scene.pick(movement.position)
         if(Cesium.defined(pickedObject)

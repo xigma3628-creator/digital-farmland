@@ -26,7 +26,7 @@
       </div>
       <!-- 假设监控录像的URL存储在FarmlandMonitoringData类的一个新属性中 -->
       <video width="100%" controls>
-        <source :src="'/static/35.mp4'" type="video/mp4">
+        <source :src="resourceBaseUrl+'/static/35.mp4'" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </div>
@@ -60,7 +60,7 @@ export default defineComponent({
         emit('update:show', newValue);
       }
     })
-
+    const resourceBaseUrl=ref((window as any).resourceBaseUrl+'')
     const params = computed<{
       pos: Cartesian2,
       show: boolean,
@@ -83,7 +83,8 @@ export default defineComponent({
     return {
       dialogVisible,
       params,
-      closeDialog
+      closeDialog,
+      resourceBaseUrl
     }
   }
 })

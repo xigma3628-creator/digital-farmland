@@ -103,12 +103,12 @@ export default defineComponent({
       const intrusionDetection =viewer.jt?.intrusionDetection
       if(intrusionDetection){
         intrusionDetection.isInsideCallback = function() {
-          borderlayer?.instance.ctx.setIntrude(true)
+          borderlayer?.instance.setIntrude(true)
         }
         intrusionDetection.noInsideCallback = function() {
           isProcessing.value = false;
           rcxj.value='';
-          borderlayer?.instance.ctx.setIntrude(false)
+          borderlayer?.instance.setIntrude(false)
         }
         setTimeout(() => {
           isProcessing.value=true

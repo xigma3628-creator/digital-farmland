@@ -115,10 +115,14 @@ export default defineComponent({
       const borderlayer = viewer?.jt?.layerManager.getLayer('border-layer')
       const intrusionDetection = new IntrusionDetection(viewer)
       intrusionDetection.isInsideCallback = function() {
-        borderlayer?.instance.ctx.setIntrude(true)
+        // const  a=borderlayer?.instance;
+        // debugger
+        borderlayer?.instance.setIntrude(true)
       }
       intrusionDetection.noInsideCallback = function() {
-        borderlayer?.instance.ctx.setIntrude(false)
+        // const  a=borderlayer?.instance;
+        // debugger
+        borderlayer?.instance.setIntrude(false)
       }
       setTimeout(() => {
         intrusionDetection.startPersonTrack()

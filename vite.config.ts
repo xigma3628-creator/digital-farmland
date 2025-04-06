@@ -12,6 +12,7 @@ import vitePluginCesium from './plugins/vite.plugin.cesium'
 export default defineConfig(({ command, mode }) => {
   const alias = [{ find: '@', replacement: resolve(__dirname, 'src') }]
   return {
+    base: '/three.js-demo/digital-farmland/', // 新增这一行
     plugins: [
       vitePluginCesium(),
       vueI18nPlugin({

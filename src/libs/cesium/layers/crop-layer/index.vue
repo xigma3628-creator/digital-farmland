@@ -36,7 +36,7 @@ export default defineComponent({
         geoJson1.features.forEach((feature: any) => {
           const { geometry, properties } = feature
           const position = Cartesian3.fromDegrees(geometry.coordinates[0], geometry.coordinates[1])
-          let imageUrl = `/static/imgs/${properties.plantType}.png`
+          let imageUrl = (window as any).resourceBaseUrl+`/static/imgs/${properties.plantType}.png`
           if (properties.plantType) {
             collection.add({
               position: position,
@@ -60,7 +60,7 @@ export default defineComponent({
           const { geometry, properties } = feature
           const position = Cartesian3.fromDegrees(geometry.coordinates[0], geometry.coordinates[1])
           if (properties.type) {
-            let imageUrl = `/static/imgs/${properties.type}.png`
+            let imageUrl =(window as any).resourceBaseUrl+ `/static/imgs/${properties.type}.png`
             collection.add({
               position: position,
               image: imageUrl,

@@ -27,9 +27,9 @@ class LayerManager {
     }
     this.layers.set(id, layer);
     // if(id=='border-layer'){
-    //   debugger
+    //
     // }
-    // debugger
+    //
     if(layer.collection instanceof EntityCollection){
       this.viewer.entities.add(layer.collection);
     }else if(layer.collection instanceof PrimitiveCollection){

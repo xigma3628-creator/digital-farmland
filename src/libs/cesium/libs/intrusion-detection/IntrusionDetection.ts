@@ -99,7 +99,7 @@ class IntrusionDetection {
       })]),
       position: pos,
       billboard: {
-        image: "/static/imgs/人员分配、人员定位.png",
+        image:(window as any).resourceBaseUrl+ "/static/imgs/人员分配、人员定位.png",
         scale: 0.25,
         pixelOffset: new Cesium.Cartesian2(0, -20),
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,

@@ -20,7 +20,7 @@
         <el-button type="primary" @click="handleStop">结束</el-button>
       </div>
       <video width="100%" controls autoplay loop>
-        <source :src="'/static/35.mp4'" type="video/mp4">
+        <source :src="resourceBaseUrl+'/static/35.mp4'" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </div>
@@ -63,6 +63,7 @@ export default defineComponent({
     const viewer = (cesiumRef || {}).viewer
     const dialogTop = ref('30vh')
     const dialogLeft = ref('-400px')
+    const resourceBaseUrl=ref((window as any).resourceBaseUrl+'')
 
     const closeDialog = () => {
       dialogVisible.value = false;
@@ -133,7 +134,8 @@ export default defineComponent({
       closeDialog,
       handleStop,
       dialogTop,
-      dialogLeft
+      dialogLeft,
+      resourceBaseUrl
     }
   }
 })

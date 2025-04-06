@@ -8,7 +8,7 @@
           <div class="bs-overview-item">
               <div class="bs-overview-icon">
 <!--                #8bc34a-->
-                <img src="/static/imgs/农田.png"/>
+                <img src="/static/imgs/农田.png" />
               </div>
               <div class="bs-overview-right">
                 <div class="bs-overview-value">

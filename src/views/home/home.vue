@@ -44,7 +44,7 @@
           <equipment-layer></equipment-layer>
 <!--          <test3d-tiles-layer></test3d-tiles-layer>-->
         </template>
-
+        <loading-page v-if="!cesiumLoaded"></loading-page>
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
       </div>
     </div>
@@ -85,10 +85,12 @@ import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import BorderLayer from '@/libs/cesium/layers/border-layer/index.vue'
 import Bigscreen from '@/views/home/bigscreen/bigscreen.vue'
 import EquipmentLayer from '@/libs/cesium/layers/equipment-layer/index.vue'
+import LoadingPage from '@/views/home/loading-page/loading-page.vue'
 
 export default defineComponent({
   name: 'jt-home',
   components: {
+    LoadingPage,
     EquipmentLayer,
     Bigscreen,
     BorderLayer,

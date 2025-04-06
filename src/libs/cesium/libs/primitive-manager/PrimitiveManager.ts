@@ -157,7 +157,7 @@ class PrimitiveManager {
     }
     this.syncJTPrimitives()
     // if(c3Dtileset.name==='成都建筑群'){
-    //   debugger
+    //
     // }
     return c3Dtileset
   }

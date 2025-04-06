@@ -48,23 +48,23 @@ export default defineComponent({
       switch (store.state.template.weather) {
         case WeatherType.Cloudy:
           obj.name='多云';
-          obj.iconUrl='/static/imgs/多云.png';
+          obj.iconUrl=(window as any).resourceBaseUrl+'/static/imgs/多云.png';
           break;
         case WeatherType.Sun:
           obj.name='晴';
-          obj.iconUrl='/static/imgs/晴天.png';
+          obj.iconUrl=(window as any).resourceBaseUrl+'/static/imgs/晴天.png';
           break;
         case WeatherType.Rain:
           obj.name='雨'
-          obj.iconUrl='/static/imgs/雨.png';
+          obj.iconUrl=(window as any).resourceBaseUrl+'/static/imgs/雨.png';
           break;
         case WeatherType.Snow:
           obj.name='雪'
-          obj.iconUrl='/static/imgs/雪.png';
+          obj.iconUrl=(window as any).resourceBaseUrl+'/static/imgs/雪.png';
           break;
         case WeatherType.OvercastSky:
           obj.name='阴';
-          obj.iconUrl='/static/imgs/阴.png';
+          obj.iconUrl=(window as any).resourceBaseUrl+'/static/imgs/阴.png';
           break;
       }
       return {
