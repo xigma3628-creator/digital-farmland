@@ -1,7 +1,7 @@
 # 简介
 
 本项目是数字农田项目，这个项目是我检验自己cesium学习成果开发的项目。在线预览地址：
-[https://coderfmc.github.io/three.js-demo/digital-farmland/](https://vue3-cesium-typescript-start-up-template.vercel.app/)
+[https://coderfmc.github.io/three.js-demo/digital-farmland/](https://coderfmc.github.io/three.js-demo/digital-farmland/)
 如果对您有帮助的话，希望能够给个星星。
 _在线预览，可能需要跨过[墙]才能访问_
 
