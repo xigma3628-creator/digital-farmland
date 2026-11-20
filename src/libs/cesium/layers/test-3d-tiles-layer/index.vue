@@ -26,8 +26,8 @@ export default defineComponent({
     }
     const add3DTilese= async (viewer:Cesium.Viewer) => {
       const currentTileset=await  viewer.jt?.primitiveManager.add3DTileset({
-        name:'广州南沙',
-        url:'http://192.168.31.162:42225/distribution/model/hjri2qqrmiiu/tileset.json',
+        name:'3D Tiles 示例',
+        url:'/static/demo/tileset.json',
         show:true,
       })
 

@@ -2,7 +2,7 @@
 // 1) 以 --base=./ 二次构建（Capacitor WebView 按相对路径加载，避免 /three.js-demo 前缀 404）
 // 2) 剥离 cesium 注入标签（工人端用不到地图 SDK，省几十 MB 体积）
 // 3) 将 worker.html（改名 index.html）+ assets/ 装配到 worker-app/www/
-// API 地址通过构建期 VITE_API_BASE 烘进产物，例如：VITE_API_BASE=http://192.168.1.10:3100 node scripts/pack-worker.mjs
+// API 地址通过构建期 VITE_API_BASE 烘进产物，例如：VITE_API_BASE=http://<局域网IP>:3100 node scripts/pack-worker.mjs
 import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'

@@ -278,7 +278,7 @@ export default defineComponent({
       // change3DTilesetHeight(e as Cesium.Cesium3DTileset, -670)
       // pm.add3DTileset({
       //   name:'广州南沙建筑物绿化瓦片',
-      //   url:'http://192.168.31.162:42225/distribution/model/hjri2qqrmiiu/tileset.json'
+      //   url:'http://<tiles-server>/distribution/model/<id>/tileset.json'
       // })
 
       syncJTPrimitive()

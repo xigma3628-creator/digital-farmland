@@ -22,8 +22,7 @@
         </el-form-item>
       </el-form>
       <div class="login-hint">
-        <div>演示账号：admin / admin123（管理员）</div>
-        <div>worker1 / worker123（工人） · engineer1 / engineer123（工程师）</div>
+        <div>演示环境使用预置演示账号，账号信息见部署文档</div>
       </div>
     </el-card>
   </div>

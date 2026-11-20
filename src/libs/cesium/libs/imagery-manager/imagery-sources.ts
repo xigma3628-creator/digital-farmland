@@ -302,7 +302,7 @@ export default [
   //     providerName: 'ArcGisMapServerImageryProvider',
   //     options: {
   //       // url: 'http://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer',
-  //       url: 'http://192.168.0.171/ArcGIS/rest/services/stl/MapServer',
+  //       url: 'http://<your-arcgis-server>/ArcGIS/rest/services/stl/MapServer',
   //     },
   //   },
 
@@ -312,7 +312,7 @@ export default [
   //     providerName: 'ArcGisMapServerImageryProvider',
   //     options: {
   //       // url: 'http://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer',
-  //       url: 'http://192.168.0.171/ArcGIS/rest/services/xzqxz/MapServer',
+  //       url: 'http://<your-arcgis-server>/ArcGIS/rest/services/xzqxz/MapServer',
   //     },
   //   },
 
@@ -322,7 +322,7 @@ export default [
   //     providerName: 'ArcGisMapServerImageryProvider',
   //     options: {
   //       // url: 'http://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer',
-  //       url: 'http://192.168.0.171/ArcGIS/rest/services/xzqc/MapServer',
+  //       url: 'http://<your-arcgis-server>/ArcGIS/rest/services/xzqc/MapServer',
   //     },
   //   },
   // ],
