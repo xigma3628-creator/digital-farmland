@@ -1,0 +1,13 @@
+{
+  "name": "smartgarden-worker-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "智慧园林工人端 Android 壳（Capacitor，webDir=www 由 scripts/pack-worker.mjs 装配）",
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}

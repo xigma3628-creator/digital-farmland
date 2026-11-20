@@ -24,7 +24,7 @@ import { defineComponent, ref, onMounted, inject } from 'vue'
 import { CesiumRef, CESIUM_REF_KEY } from '@/libs/cesium/cesium-vue'
 import { ElSlider } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import { Arrayable } from 'element-plus/es/utils'
+import type { Arrayable } from 'element-plus/es/utils'
 
 export default defineComponent({
   name: 'camera-percentage-change-rate',

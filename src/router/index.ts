@@ -2,8 +2,12 @@ import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } 
 import Home from '@/views/home'
 import IndustryPanels from '@/views/home/industries'
 import CarbonNeutalBigscreen from '@/views/home/industries/carbon-neutral-bigscreen'
+import SmartGarden from '@/views/home/industries/smart-garden'
 import Test from '@/views/test/test.vue'
+import Diag from '@/views/diag.vue'
 import Bigscreen from '@/views/home/bigscreen/bigscreen.vue'
+import ManageLogin from '@/views/manage/manage-login.vue'
+import Manage from '@/views/manage/manage.vue'
 
 // const routes: Array<RouteRecordRaw> = [
 //   {
@@ -31,6 +35,11 @@ const routes: Array<RouteRecordRaw> = [
         component: CarbonNeutalBigscreen,
       },
       {
+        path: 'smart-garden',
+        name: 'smart-garden',
+        component: SmartGarden,
+      },
+      {
         path: 'bigscreen',
         name: 'bigscreen',
         component: Bigscreen,
@@ -38,9 +47,24 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: '/manage-login',
+    name: 'manage-login',
+    component: ManageLogin,
+  },
+  {
+    path: '/manage',
+    name: 'manage',
+    component: Manage,
+  },
+  {
     path: '/test',
     name: 'test',
     component: Test,
+  },
+  {
+    path: '/diag',
+    name: 'diag',
+    component: Diag,
   },
 ]
 

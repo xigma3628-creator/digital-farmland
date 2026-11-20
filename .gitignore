@@ -21,3 +21,16 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# 十一期：工人端 APK 构建产物（源码与 gradle 壳保留跟踪）
+/dist-worker
+/worker-app/node_modules
+/worker-app/www
+/worker-app/android/.gradle
+/worker-app/android/build
+/worker-app/android/app/build
+/worker-app/android/local.properties
+/worker-app/android/capacitor-cordova-android-plugins
+/worker-app/android/app/src/main/assets/public
+
+*.apk

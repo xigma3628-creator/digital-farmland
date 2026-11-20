@@ -35,7 +35,7 @@
 
           <!--          <jt-locationbar v-if="cesiumLoaded && locationBarShow" />-->
         </overlay>
-        <template v-if="cesiumLoaded">
+        <template v-if="cesiumLoaded && !isGardenPage">
           <border-layer></border-layer>
           <crop-layer></crop-layer>
           <house-greenery-layer></house-greenery-layer>
@@ -43,6 +43,9 @@
           <water-layer></water-layer>
           <equipment-layer></equipment-layer>
 <!--          <test3d-tiles-layer></test3d-tiles-layer>-->
+        </template>
+        <template v-if="cesiumLoaded && isGardenPage">
+          <garden-layer></garden-layer>
         </template>
         <loading-page v-if="!cesiumLoaded"></loading-page>
         <jt-cesium-vue @loaded="loaded" :depthTestAgainstTerrain="true" />
@@ -85,6 +88,8 @@ import { CESIUM_REF_KEY, CesiumRef } from '@/libs/cesium/cesium-vue'
 import BorderLayer from '@/libs/cesium/layers/border-layer/index.vue'
 import Bigscreen from '@/views/home/bigscreen/bigscreen.vue'
 import EquipmentLayer from '@/libs/cesium/layers/equipment-layer/index.vue'
+import GardenLayer from '@/libs/cesium/layers/garden-layer/index.vue'
+import { connectAiBridge } from '@/libs/smart-garden/ai-bridge'
 import LoadingPage from '@/views/home/loading-page/loading-page.vue'
 
 export default defineComponent({
@@ -92,6 +97,7 @@ export default defineComponent({
   components: {
     LoadingPage,
     EquipmentLayer,
+    GardenLayer,
     Bigscreen,
     BorderLayer,
     CropLayer,
@@ -110,6 +116,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const route = useRoute()
+    const isGardenPage = computed(() => route.name === 'smart-garden')
     const cesiumLoaded = ref<boolean>(false)
     const cesiumRef = inject<CesiumRef>(CESIUM_REF_KEY)
 
@@ -177,6 +185,10 @@ export default defineComponent({
 
     const loaded = (): void => {
       cesiumLoaded.value = true
+      const viewer = (cesiumRef || {}).viewer
+      if (viewer) {
+        connectAiBridge(viewer)
+      }
     }
 
     const openSetting = () => {
@@ -206,6 +218,7 @@ export default defineComponent({
     return {
       test,
       cesiumLoaded,
+      isGardenPage,
       loaded,
       locationBarShow,
       browserPanelShow,

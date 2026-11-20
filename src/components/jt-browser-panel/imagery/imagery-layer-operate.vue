@@ -65,7 +65,7 @@ import { defineComponent, ref, onMounted, watch, watchEffect } from 'vue'
 import { ElSlider } from 'element-plus'
 import { PROPERTY_CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@/libs/utils/vue-const'
 import { useI18n } from 'vue-i18n'
-import { Arrayable } from 'element-plus/es/utils'
+import type { Arrayable } from 'element-plus/es/utils'
 
 export default defineComponent({
   name: 'imagery-layer-operate',

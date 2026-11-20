@@ -28,7 +28,7 @@ import { ImageryActionTypes } from '@/store/modules/jt-cesium-vue/modules/toolba
 import type { SplitType } from '@/store/modules/jt-cesium-vue/modules/toolbar/modules/imagery/state'
 import { useI18n } from 'vue-i18n'
 import { ElSlider } from 'element-plus'
-import { Arrayable } from 'element-plus/es/utils'
+import type { Arrayable } from 'element-plus/es/utils'
 
 export default defineComponent({
   name: 'imagery-split-position',

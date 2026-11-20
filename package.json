@@ -8,10 +8,12 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
     "cesium": "^1.126.0",
+    "cesium-mcp-bridge": "1.139.0",
     "core-js": "^3.26.1",
     "echarts": "^5.4.1",
     "element-plus": "^2.9.3",
     "fs-extra": "^11.1.0",
+    "lil-gui": "^0.21.0",
     "rollup-plugin-external-globals": "^0.7.1",
     "serve-static": "^1.15.0",
     "vue": "^3.2.45",
@@ -49,5 +51,12 @@
     "not dead",
     "not ie 11"
   ],
+  "pnpm": {
+    "overrides": {
+      "@intlify/shared": "9.14.2",
+      "@intlify/message-compiler": "9.14.2",
+      "@intlify/core-base": "9.14.2"
+    }
+  },
   "packageManager": "pnpm@9.14.1+sha512.7f1de9cffea40ff4594c48a94776112a0db325e81fb18a9400362ff7b7247f4fbd76c3011611c9f8ac58743c3dc526017894e07948de9b72052f874ee2edfdcd"
 }

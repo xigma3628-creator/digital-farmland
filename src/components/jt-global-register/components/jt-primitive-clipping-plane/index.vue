@@ -127,7 +127,7 @@ import { LayoutActionTypes } from '@/store/modules/jt-cesium-vue/modules/layout/
 import calculatePrimitiveCenter from '@/libs/cesium/libs/calculate-primitive-center'
 import { JTPrimitiveActionTypes } from '@/store/modules/jt-cesium-vue/modules/cesium-data/modules/jt-primitive/action-types'
 import { useI18n } from 'vue-i18n'
-import { Arrayable } from 'element-plus/es/utils'
+import type { Arrayable } from 'element-plus/es/utils'
 
 
 type SelectClippingDirection = {

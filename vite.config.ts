@@ -37,5 +37,24 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias,
     },
+    build: {
+      rollupOptions: {
+        // 十一期多页入口：index.html（大屏/管理端）与 worker.html（工人端 H5）并列
+        input: {
+          main: resolve(__dirname, 'index.html'),
+          worker: resolve(__dirname, 'worker.html'),
+        },
+      },
+    },
+    server: {
+      proxy: {
+        // 高德卫星瓦片同源代理：规避浏览器端跨域/Referer 等加载问题
+        '/amap-tiles': {
+          target: 'https://webst01.is.autonavi.com',
+          changeOrigin: true,
+          rewrite: (p: string) => p.replace(/^\/amap-tiles/, ''),
+        },
+      },
+    },
   }
 })

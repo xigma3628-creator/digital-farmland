@@ -139,6 +139,7 @@ export default defineComponent({
 
     const initializeCesium = (options: any = {}): Cesium.Viewer => {
       const DEFAULT_OPT: Cesium.Viewer.ConstructorOptions = {
+        baseLayer: false, // 禁用默认 Ion 影像（token 失效/CDN 不可达会导致底图异常），底图统一由 imageryManager 提供
         animation: props.animation, // 是否创建动画小器件，左下角仪表
         baseLayerPicker: props.baseLayerPicker, // 是否显示图层选择器
         fullscreenButton: props.fullscreenButton, // 是否显示全屏按钮
@@ -228,11 +229,9 @@ export default defineComponent({
       viewer.jt?.imageryManager.addGdImagery();
 
       if(viewer){
-        //资源加载完毕
-        viewer.jt?.resourceLoader.loadResource().then(res=>{
-
-          context.emit(LOADED_EVENT, { viewer })
-        }).catch(e=>{})
+        // viewer 就绪立即放行主界面；GitHub 示例资源转为后台加载，慢/失败均不阻塞
+        viewer.jt?.resourceLoader.loadResource().catch(() => {})
+        context.emit(LOADED_EVENT, { viewer })
       }
     })
 

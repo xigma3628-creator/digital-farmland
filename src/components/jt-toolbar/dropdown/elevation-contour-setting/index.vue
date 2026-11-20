@@ -83,7 +83,7 @@ import { ElSlider, ElInputNumber, ElColorPicker } from 'element-plus'
 import { useStore } from '@/store'
 import { rgbaStringToStruct } from '@/libs/utils/rgb'
 import { useI18n } from 'vue-i18n'
-import { Arrayable } from 'element-plus/es/utils'
+import type { Arrayable } from 'element-plus/es/utils'
 
 export default defineComponent({
   name: 'jt-elevation-contour-setting',
